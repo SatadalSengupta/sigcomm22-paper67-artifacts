@@ -1,9 +1,0 @@
-// ( 32w0x01010101 &&& 32w0xffffffff, 32w0x02020202 &&& 32w0xffffffff, _, _ ): set_seq_match_packet_type( SQPM_SEQ );
-// ( 32w0x02020202 &&& 32w0xffffffff, 32w0x01010101 &&& 32w0xffffffff, _, _ ): set_seq_match_packet_type( SQPM_ACK );
-// ( 32w0x03030303 &&& 32w0xffffffff, _, _, _ ): set_seq_match_packet_type( SQPM_SEQ );
-// ( _, 32w0x03030303 &&& 32w0xffffffff, _, _ ): set_seq_match_packet_type( SQPM_ACK );
-// ( 32w0x04040404 &&& 32w0xffffffff, _, _, _ ): set_seq_match_packet_type( SQPM_SEQ );
-// ( _, 32w0x04040404 &&& 32w0xffffffff, _, _ ): set_seq_match_packet_type( SQPM_ACK );
-
-( 32w0x0a09991f &&& 32w0xffffffff, 32w0xb8a4e404 &&& 32w0xffffffff, _, _ ): set_seq_match_packet_type( SQPM_SEQ );
-( 32w0xb8a4e404 &&& 32w0xffffffff, 32w0x0a09991f &&& 32w0xffffffff, _, _ ): set_seq_match_packet_type( SQPM_ACK );

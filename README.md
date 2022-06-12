@@ -20,3 +20,7 @@ We provide the following datasets for the artifact evaluation process:
 
 We are able to share the interception attack trace because both end-hosts are controlled by us, and as such there is no sensitive information pertaining to any other user on our campus. We choose `smallFlows.pcap` for the other evaluations since it is commonly used to test `tcptrace`, a passive RTT measurement tool (a variant of which is also our baseline).
 
+## Instructions to Execute Our Code
+
+1. The Tofino prototype code is in `prototype`. This code can be used to reproduce Figure 8, by replaying `pcaps/interception_attack_trace.pcap` through the Tofino model.
+2. The simulation code is present in `simulations`. This code can be used to obtain plots equivalent to Figures 9--14, by feeding `pcaps/smallFlows.pcap` as the input.

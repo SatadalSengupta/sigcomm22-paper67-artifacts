@@ -15,7 +15,7 @@ The following section describes the details.
 ## Data Provided for Artifact Evaluation
 
 We provide the following datasets for the artifact evaluation process:
-1. Interception attack trace to reproduce Figure 8: `pcaps/bgp_attack.pcap`
+1. Interception attack trace to reproduce Figure 8: `pcaps/interception_attack_trace.pcap`
 2. [A public trace](https://tcpreplay.appneta.com/wiki/captures.html) ([smallFlows.pcap](https://s3.amazonaws.com/tcpreplay-pcap-files/smallFlows.pcap)) in lieu of our 15 mins. campus trace to obtain plots equivalent to Figures 9 through 14: `pcaps/smallFlows.pcap`
 
 We are able to share the interception attack trace because both end-hosts are controlled by us, and as such there is no sensitive information pertaining to any other user on our campus. We choose `smallFlows.pcap` for the other evaluations since it is commonly used to test `tcptrace`, a passive RTT measurement tool (a variant of which is also our baseline).

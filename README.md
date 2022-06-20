@@ -30,13 +30,19 @@ In this section of the README, we explain the steps to execute to log in to the 
 1. Copy the SSH key in the HotCRP comments to a text file called `sigcomm22-paper67-aws-key.pem`.
 
 2. Move this file to your system's `.ssh` directory by executing in a terminal:
-```mv sigcomm22-paper67-aws-key.pem ~/.ssh```
+```
+mv sigcomm22-paper67-aws-key.pem ~/.ssh
+```
 
 3. Change the file permissions of the SSH key file to one permitted by AWS, by executing in a terminal:
-```chmod 400 ~/.ssh/sigcomm22-paper67-aws-key.pem```
+```
+chmod 400 ~/.ssh/sigcomm22-paper67-aws-key.pem
+```
 
 4. Log into the EC2 instance by executing in a terminal:
-```ssh -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.amazonaws.com```
+```
+ssh -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.amazonaws.com
+```
 You should be logged into the EC2 instance as user `ubuntu` and should be automatically `cd`'d into the directory `~/bf-sde-9.7.0`.
 
 Please reach out to us via HotCRP comments if you face any issues during login and we will try to resolve them immediately.
@@ -49,13 +55,17 @@ Therefore, it is necessary to check whether other AEC evaluators are active once
 Please perform both the following steps (1 & 2) to confirm that you are the only AEC evaluator active at the moment.
 
 1. Please execute the following from a terminal inside the EC2 instance:
-```ps -ef | grep run_tofino_model | wc -l```
+```
+ps -ef | grep run_tofino_model | wc -l
+```
 If the response is `1`, you are the only active AEC evaluator; please proceed with **Step 3**.
 If the response is `2` or more, someone else is actively executing the Tofino processes and you should try later once they are finished.
 If they seem to be active for too long (e.g., hours), it is possible that the evaluator forgot to kill the processes once they completed their evaluation; please reach out to them via HotCRP or otherwise in that case.
 
 2. Please execute the following from a terminal inside the EC2 instance:
-```ps -ef | grep run_switchd | wc -l```
+```
+ps -ef | grep run_switchd | wc -l
+```
 If the response is `1`, you are the only active AEC evaluator.
 If the response is `2` or more, someone else is actively executing the Tofino processes and you should try later once they are finished.
 If they seem to be active for too long (e.g., hours), it is possible that the evaluator forgot to kill the processes once they completed their evaluation; please reach out to them via HotCRP or otherwise in that case.
@@ -87,22 +97,30 @@ If you choose to change directories during *Step 3* (to perform `git pull`, etc.
 ### Step 4: Executing the Tofino prototype code
 
 1. From inside the `~/bf-sde-9.7.0` directory, execute the following to build the Tofino prototype code:
-```./p4_build.sh -p ~/sigcomm22-paper67-artifacts/prototype/p4rtt_tofino1.p4```
+```
+./p4_build.sh -p ~/sigcomm22-paper67-artifacts/prototype/p4rtt_tofino1.p4
+```
 Wait for the build to finish. It may take a few (usually between 1-4) minutes.
 The next few steps will engage a terminal each, so please login from 4 different terminals or use `tmux` to split your terminal.
 
 2. From inside the `~/bf-sde-9.7.0` directory, execute the following to start the Tofino model:
-```./run_tofino_model.sh -p p4rtt_tofino1```
+```
+./run_tofino_model.sh -p p4rtt_tofino1
+```
 Wait until you see the message `CLI listening on port 8000`. This terminal will now be engaged -- please move to the next terminal.
 
 3. From inside the `~/bf-sde-9.7.0` directory, execute the following to start the Tofino switch-driver:
-```./run_switchd.sh -p p4rtt_tofino1```
+```
+./run_switchd.sh -p p4rtt_tofino1
+```
 Wait until you the `bfshell> ` shell has been activated. This terminal will now be engaged -- please move to the next terminal.
 
 ### Step 5: Replaying the smallFlows trace to generate a graph similar to Figure 7
 
 1. From any directory, execute the following to start capturing the outcoming packets on the virtual interface `veth8`:
-```sudo tcpdump -i veth8 -w ~/sigcomm22-paper67-artifacts/output_traces/direction_rtts.pcap```
+```
+sudo tcpdump -i veth8 -w ~/sigcomm22-paper67-artifacts/output_traces/direction_rtts.pcap
+```
 
 ### Step 6: Replaying the interception attack trace to generate Figure 8
 

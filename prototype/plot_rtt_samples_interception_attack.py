@@ -72,7 +72,7 @@ def chunks(lst, n):
 
 ########################################
 
-def plot_attack_detection(rtt_samples, pkt_timestamps, output_plot_path):
+def plot_attack_detection(rtt_samples, pkt_timestamps):
 
     rtt_samples = [r/1000 for r in rtt_samples]
     pkt_timestamps = [t/1000000 for t in pkt_timestamps]

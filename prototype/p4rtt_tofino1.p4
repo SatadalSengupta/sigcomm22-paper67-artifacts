@@ -549,7 +549,7 @@ control SwitchIngress(
 
     apply {
 
-        // ig_md.ingress_tstamp = hdr.ethernet.dst_addr[31:0]; // For edited trace file to be replayed in the Tofino model
+        ig_md.ingress_tstamp = hdr.ethernet.dst_addr[31:0]; // For augmented trace file to be replayed in the Tofino model
         
         if ( hdr.ethernet.isValid() && hdr.p4rtt_recirc.isValid() && !hdr.ipv4.isValid() && !hdr.tcp.isValid() ) {
 

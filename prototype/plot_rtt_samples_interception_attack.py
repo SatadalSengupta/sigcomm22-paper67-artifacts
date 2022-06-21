@@ -109,7 +109,7 @@ def plot_attack_detection(rtt_samples, pkt_timestamps):
     plt.legend()
     plt.tight_layout()
     # plt.savefig("bgp_attack_rtts.png", format="png", dpi=300)
-    plt.savefig("/home/ubuntu/sigcomm22-paper67-artifacts/plots/bgp_attack_rtts.pdf", format="pdf", dpi=300)
+    plt.savefig("/home/ubuntu/sigcomm22-paper67-artifacts/plots/interception_attack_rtts.pdf", format="pdf", dpi=300)
 
 ########################################
 

@@ -78,9 +78,10 @@ Feel free to execute `cd ~/sigcomm22-paper67-artifacts && git pull` anyway if yo
 
 2. We used the 15 mins. campus trace to produce Figure 7 in the paper.
 As mentioned before, we are not allowed to share this trace due to IRB and PADR protections.
-We have instead shared [a public trace](https://tcpreplay.appneta.com/wiki/captures.html) ([smallFlows.pcap](https://s3.amazonaws.com/tcpreplay-pcap-files/smallFlows.pcap)).
+We request the reviewer to proceed to Figure 8 instead, since we can share the data for it, and it allows for evaluation of our prototype just as Figure 7 would.
+<!-- We have instead shared [a public trace](https://tcpreplay.appneta.com/wiki/captures.html) ([smallFlows.pcap](https://s3.amazonaws.com/tcpreplay-pcap-files/smallFlows.pcap)).
 The trace is available in the GitHub repo and in the EC2 instance at `~/sigcomm22-paper67-artifacts/pcaps/smallFlows.pcap`.
-While Figure 7 can't be exactly reproduced using this dataset, we provide instructions later to produce a figure that emulates the main workflow and features of our prototype.
+While Figure 7 can't be exactly reproduced using this dataset, we provide instructions later to produce a figure that emulates the main workflow and features of our prototype. -->
 
 3. The network trace we use to produce Figure 8 in the paper is a trace captured inside our campus.
 We initiated a BGP interception attack using the PEERING testbed for this experiment, as described in the paper.
@@ -115,17 +116,55 @@ Wait until you see the message `CLI listening on port 8000`. This terminal will 
 ```
 Wait until you the `bfshell> ` shell has been activated. This terminal will now be engaged -- please move to the next terminal.
 
-### Step 5: Replaying the smallFlows trace to generate a graph similar to Figure 7
+<!-- ### Step 5: Replaying the smallFlows trace to generate a graph similar to Figure 7
 
 1. From any directory, execute the following to start capturing the outcoming packets on the virtual interface `veth8`:
 ```
 sudo tcpdump -i veth8 -w ~/sigcomm22-paper67-artifacts/output_traces/direction_rtts.pcap
+``` -->
+
+### Step 5: Replaying the interception attack trace through our Tofino prototype
+
+1. From any directory, execute the following to start capturing the outcoming packets on the switch interface `veth8`:
 ```
+sudo tcpdump -i veth8 -w ~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap
+```
+The output RTT samples from our deployed P4 code will now be saved to this `pcap` file.
+This terminal will now be engaged -- please move to the next terminal.
 
-### Step 6: Replaying the interception attack trace to generate Figure 8
+2. From any directory, execute the following to replay the interception attack trace on the switch interface `veth0`:
+```
+sudo tcpreplay -i veth0 -p 100 ~/sigcomm22-paper67-artifacts/pcaps/interception_attack_trace.pcap
+```
+Wait until `tcpreplay` has finished executing.
 
-1. From any directory, execute the following to start capturing the outcoming packets on the virtual interface `veth8`:
-```sudo tcpdump -i veth8 -w ~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap```
+3. Once `tcpreplay` has exited, press `Ctrl+C` in the terminal where `tcpdump` was running.
+All the RTT output data is now saved in the `pcap` file `~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap`.
+
+### Step 6: Exit all processes
+
+In order to allow other AEC evaluators to execute our code without issues, please exit the running processes.
+
+1. Please press `Ctrl+C` on the terminal where `run_tofino_model.sh` was running.
+Wait until the process has exited.
+
+2. Performing **1** should also kill the process on the terminal where `run_switchd.sh` was running.
+Please double-check.
+
+3. Double-check that the `tcpreplay` and `tcpdump` processes have also exited.
+
+### Step 7: Reproduce Figure 8
+
+1. Please execute the following command to generate the interception-attack-detection plot from the saved output trace file ``~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap`:
+```
+python3 ~/sigcomm22-paper67-artifacts/prototype/plot_rtt_samples_interception_attack.py ~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap
+```
+The resulting plot will be located in `~/sigcomm22-paper67-artifacts/plots/interception_attack_rtts.pdf`.
+
+2. Download the generated plot to your local system to view it by executing:
+```
+scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.amazonaws.com:~/sigcomm22-paper67-artifacts/plots/interception_attack_rtts.pdf <local_system_path>
+```
 
 ## Instructions to Execute the Simulator
 

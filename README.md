@@ -108,13 +108,13 @@ The next few steps will engage a terminal each, so please login from 4 different
 ```
 ./run_tofino_model.sh -p p4rtt_tofino1
 ```
-Wait until you see the message `CLI listening on port 8000`. This terminal will now be engaged -- please move to the next terminal.
+Wait until you see the message `CLI listening on port 8000`. This terminal will now be engaged &mdash; please move to the next terminal.
 
 3. From inside the `~/bf-sde-9.7.0` directory, execute the following to start the Tofino switch-driver:
 ```
 ./run_switchd.sh -p p4rtt_tofino1
 ```
-Wait until you the `bfshell> ` shell has been activated. This terminal will now be engaged -- please move to the next terminal.
+Wait until you the `bfshell> ` shell has been activated. This terminal will now be engaged &mdash; please move to the next terminal.
 
 <!-- ### Step 5: Replaying the smallFlows trace to generate a graph similar to Figure 7
 
@@ -130,7 +130,7 @@ sudo tcpdump -i veth8 -w ~/sigcomm22-paper67-artifacts/output_traces/direction_r
 sudo tcpdump -i veth8 -w ~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap
 ```
 The output RTT samples from our deployed P4 code will now be saved to this `pcap` file.
-This terminal will now be engaged -- please move to the next terminal.
+This terminal will now be engaged &mdash; please move to the next terminal.
 
 2. From any directory, execute the following to replay the interception attack trace on the switch interface `veth0`:
 ```
@@ -155,7 +155,7 @@ Please double-check.
 
 ### Step 7: Reproduce Figure 8
 
-1. Please execute the following command to generate the interception-attack-detection plot from the saved output trace file ``~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap`:
+1. Please execute the following command to generate the interception-attack-detection plot from the saved output trace file `~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap`:
 ```
 python3 ~/sigcomm22-paper67-artifacts/prototype/plot_rtt_samples_interception_attack.py ~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap
 ```
@@ -168,4 +168,4 @@ scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.am
 
 ## Instructions to Execute the Simulator
 
-The simulation code is present in `simulations`. This code can be used to obtain plots equivalent to Figures 9--14, by feeding `pcaps/smallFlows.pcap` as the input.
+The simulation code is present in `simulations`. This code can be used to obtain plots equivalent to Figures 9&mdash;14, by feeding `pcaps/smallFlows.pcap` as the input.

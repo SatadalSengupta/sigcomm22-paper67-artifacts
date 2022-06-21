@@ -73,7 +73,7 @@ def chunks(lst, n):
 
 ########################################
 
-def plot_attack_detection(rtt_samples, pkt_timestamps):
+def plot_attack_detection(rtt_samples, pkt_timestamps, output_plot_path):
 
     rtt_samples = [r/1000 for r in rtt_samples]
     pkt_timestamps = [t/1000000 for t in pkt_timestamps]
@@ -109,7 +109,7 @@ def plot_attack_detection(rtt_samples, pkt_timestamps):
     plt.legend()
     plt.tight_layout()
     # plt.savefig("bgp_attack_rtts.png", format="png", dpi=300)
-    plt.savefig("bgp_attack_rtts.pdf", format="pdf", dpi=300)
+    plt.savefig("~/sigcomm22-paper67-artifacts/plots/bgp_attack_rtts.pdf", format="pdf", dpi=300)
 
 ########################################
 
@@ -133,13 +133,14 @@ def plot_comparison_with_tcptrace(rtt_samples, pkt_timestamps, pkt_acknos, tcptr
 ########################################
 
 def main():
-    if len(sys.argv) < 3:
-        raise Exception("2 arguments expected")
+    if len(sys.argv) < 2:
+        raise Exception("1 argument expected")
     
     src_trace_path   = sys.argv[1]
-    bgp_samples_path = sys.argv[2]
+    # bgp_samples_path = sys.argv[2]
+    # output_plot_path = sys.argv[2]
 
-    tcptrace_samples, tcptrace_seqnos = extract_tcptrace_samples(bgp_samples_path)
+    # tcptrace_samples, tcptrace_seqnos = extract_tcptrace_samples(bgp_samples_path)
     rtt_samples, pkt_timestamps, pkt_acknos = extract_rtt_samples(src_trace_path)
     # plot_comparison_with_tcptrace(rtt_samples, pkt_timestamps, pkt_acknos, tcptrace_samples, tcptrace_seqnos)
     plot_attack_detection(rtt_samples, pkt_timestamps)

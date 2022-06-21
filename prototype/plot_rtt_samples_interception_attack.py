@@ -1,10 +1,10 @@
 from scapy.all import *
 import sys
 import warnings
-
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
+warnings.filterwarnings("ignore")
 
 sns.set()
 sns.set_style("whitegrid")
@@ -135,8 +135,6 @@ def plot_comparison_with_tcptrace(rtt_samples, pkt_timestamps, pkt_acknos, tcptr
 def main():
     if len(sys.argv) < 2:
         raise Exception("1 argument expected")
-
-    warnings.filterwarnings("ignore")
     
     src_trace_path   = sys.argv[1]
     # bgp_samples_path = sys.argv[2]

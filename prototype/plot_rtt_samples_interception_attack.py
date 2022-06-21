@@ -1,4 +1,3 @@
-from turtle import bgpic
 from scapy.all import *
 import sys
 

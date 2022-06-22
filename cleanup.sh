@@ -1,0 +1,11 @@
+rm -f ~/bf-sde-9.7.0/*.log
+rm -f ~/sigcomm22-paper67-artifacts/output_traces/attack_rtts.pcap
+rm -f ~/sigcomm22-paper67-artifacts/plots/interception_attack_rtts.pdf
+rm -f ~/sigcomm22-paper67-artifacts/simulations/intermediate/smallFlows.pickle
+rm -f ~/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_nlrZ.txt
+rm -rf ~/sigcomm22-paper67-artifacts/simulations/intermediate/rtts
+rm -f ~/sigcomm22-paper67-artifacts/simulations/remove_unwanted_files.py
+rm -f ~/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_rtts_all.txt
+rm -f ~/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_rtts_nosyn.txt
+rm -f ~/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_rtts_syn.txt
+rm -f ~/sigcomm22-paper67-artifacts/plots/figure_12_equivalent.pdf

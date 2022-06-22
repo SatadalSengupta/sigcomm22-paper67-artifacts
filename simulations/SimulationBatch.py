@@ -189,8 +189,8 @@ class SimulationBatch(object):
     def _augment_execution_script(self, simulation_parameters):
 
         params_str = json.dumps(simulation_parameters)
-        command = "nohup python3 -u {}/Simulation.py '{}' 1>>{} 2>&1 &\n".format(
-                    self._tcptrace_data_paths["code_path"], params_str, self._log_file)
+        command = "nohup python3 -u Simulation.py '{}' 1>>{} 2>&1 &\n".format(
+                    params_str, self._log_file)
         
         with open(self._local_exec_script, 'a') as fp:
             fp.write(command)
@@ -205,24 +205,6 @@ class SimulationBatch(object):
         
         path_st = os.stat(self._local_exec_script)
         os.chmod(self._local_exec_script, path_st.st_mode | stat.S_IEXEC)
-
-    ##################################################
-
-    def _trigger_p4rtt_simulation(self, simulation_params):
-
-        # round_num = simulation_params["sim_params"]["round_number"]
-        # # self._custom_print("Round {}/{}: Build packets data".format(round_num, self._num_combinations-1))
-        # # self._packets = self._build_packets_data()
-        # # simulation_params["sim_params"]["total_packets"] = len(self._packets)
-        
-        # self._custom_print("Round {}/{}: Create simulation object with current set of params".format(round_num, self._num_combinations-1))
-        # simulation = Simulation(simulation_params, self._test)
-        # self._custom_print("Round {}/{}: Start P4RTT simulations with created packets list".format(round_num, self._num_combinations-1))
-        # # simulation.run_p4rtt_simulation(self._packets)
-        # simulation.run_p4rtt_simulation()
-
-        ## Execute shell script
-        return
 
     ##################################################
 

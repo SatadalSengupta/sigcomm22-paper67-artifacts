@@ -42,6 +42,21 @@ def main():
 
         tcptrace_const_syn.process_tcptrace_ACK(packet, allow_syn=True)
         tcptrace_const_nosyn.process_tcptrace_ACK(packet, allow_syn=False)
+
+        print("tcptrace with SYN:")
+        print(tcptrace_const_syn._tcptrace_flow_table)
+        print(tcptrace_const_syn._tcptrace_packet_table)
+        print(tcptrace_const_syn._tcptrace_sample_count)
+        print(tcptrace_const_syn._tcptrace_rtt_samples)
+
+        print("tcptrace with no SYN:")
+        print(tcptrace_const_nosyn._tcptrace_flow_table)
+        print(tcptrace_const_nosyn._tcptrace_packet_table)
+        print(tcptrace_const_nosyn._tcptrace_sample_count)
+        print(tcptrace_const_nosyn._tcptrace_rtt_samples)
+
+        if packets_count == 10:
+            break
             
         packets_count += 1
     

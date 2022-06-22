@@ -194,16 +194,11 @@ class Simulation(object):
                             self._tcptrace_data_paths["part_pkts_count"]-1, t_start.strftime(t_format)))
         
         ## Load packets
-        process_packets_path = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets_round_{}.pickle".format(
-                                    str(count_data).zfill(2)))
+        # process_packets_path = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets_round_{}.pickle".format(
+        #                             str(count_data).zfill(2)))
+        process_packets_path = self._tcptrace_data_paths["part_pkts_pickle"]
         with open(process_packets_path, "rb") as packets_fp:
             self._packets = pickle.load(packets_fp)
-        
-        if self._test:
-            self._packets = self._packets[:100000]
-            # self._packets = self._packets[:1518127]
-            
-        # self._packets = self._packets[:10000]
 
         ## Populate counts
         self._curr_packets_count = len(self._packets)

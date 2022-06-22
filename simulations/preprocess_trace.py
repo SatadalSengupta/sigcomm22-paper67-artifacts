@@ -43,6 +43,7 @@ def parse_trace(src_trace_path, dst_trace_path):
             ack_num  = int(packet[TCP].ack)
             tcp_len  = len(packet[TCP].payload)
 
+            print(packet.time)
             print(pkt_time)
             break
 

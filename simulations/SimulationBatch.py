@@ -75,9 +75,12 @@ class SimulationBatch(object):
             self._simulation_batch_number = max(batch_numbers) + 1
         else:
             self._simulation_batch_number = 0
+        ## Added:
+        self._simulation_batch_number = 0
 
         ## Create simulation batch directory
-        self._simulation_batch_dir = os.path.join(tcptrace_data_paths["p4rtt_simulations_dir"], "simulation_batch_{}".format(str(self._simulation_batch_number).zfill(3)))
+        self._simulation_batch_dir = os.path.join(tcptrace_data_paths["p4rtt_simulations_dir"], "simulation_batch_{}".format(
+            str(self._simulation_batch_number).zfill(3)))
         if os.path.exists(self._simulation_batch_dir):
             self._custom_print("Batch path already exists. Exit simulation.")
             exit(1)

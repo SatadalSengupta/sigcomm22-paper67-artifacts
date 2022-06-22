@@ -13,7 +13,7 @@ def run_simulations_batch():
     local_path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate"
     
     tcptrace_data_paths = {
-                            "p4rtt_simulations_dir": os.path.join(local_path, "dart_simulations"),
+                            "p4rtt_simulations_dir": os.path.join(local_path, "dart_simulations_infmem"),
                             "part_pkts_pickle": os.path.join(local_path, "smallFlows.pickle"),
                             "part_pkts_count": 1,
                             "total_packets_count": 14261,
@@ -28,7 +28,7 @@ def run_simulations_batch():
                         "entry_timeout": [None, ],
                         "sampling_threshold": [None, ],
                         "sampling_rate": [1.0, ],
-                        "syn_action": ["ignore", ],
+                        "syn_action": ["include", "ignore"],
                         "syn_timeout_entry_timeout": [None, ],
                         "syn_staging_num_stages": [1, ],
                         "syn_staging_max_size": [1024, ],

@@ -168,4 +168,75 @@ scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.am
 
 ## Instructions to Execute the Simulator
 
-The simulation code is present in `simulations`. This code can be used to obtain plots equivalent to Figures 9&mdash;14, by feeding `pcaps/smallFlows.pcap` as the input.
+The simulation code is present in `simulations`.
+This code can be used to obtain plots equivalent to Figures 9&mdash;14, by feeding `pcaps/smallFlows.pcap` as the input.
+The following steps take the evaluator through this process to generating the relevant plots from the network trace file.
+
+### Step 1: Preprocessing network trace data
+
+1. Please ensure that you are logged in to the EC2 instance.
+From a terminal, execute the following command to navigate to the correct directory for the simulations:
+```
+cd ~/sigcomm22-paper67-artifacts/simulations
+```
+
+2. Preprocess the network trace by executing the following command on the terminal:
+```
+python3 -u preprocess_trace.py ../pcaps/smallFlows.pcap intermediate/smallFlows.pickle
+```
+The pre-processed trace is now saved in the intermediate file `smallFlows.pickle`.
+We will use this pre-processed file to run our simulations.
+
+### Step 2: Reproducing figures equivalent to Figures 9&mdash;11
+
+1. Generate all the TCP RTTs from the `smallFlows.pcap` network trace using the `tcptrace` tool by executing the following command:
+```
+tcptrace -nrlZ --output_dir=intermediate/rtts ../pcaps/smallFlows.pcap > intermediate/tcptrace_nlrZ.txt
+```
+The RTT samples are written in individual files inside `intermediate/rtts`.
+
+2. 
+
+### Step 3: Reproducing a figure equivalent to Figure 12
+
+1. Please ensure that you are in the `simulations` directory by executing:
+```
+cd ~/sigcomm22-paper67-artifacts/simulations
+```
+
+2. Execute the following command to generate a figure equivalent to Figure 12 in the paper:
+```
+python3 rtt_analysis_wnwo_handshakes.py
+```
+The code reports statistics regarding connections and successful handshakes.
+
+3. Download the generated plot to your local system to view it by executing:
+```
+scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.amazonaws.com:~/sigcomm22-paper67-artifacts/plots/figure_12_equivalent.pdf <local_system_path>
+```
+Please note that in our original 15 mins. campus trace, we see a high number of unsuccessful handshakes due to SYN flooding attempts.
+We do not see such a phenomenon in the `smallFlows.pcap` file. As such, the number of unsuccessful handshakes is actually `zero`.
+Instead of reporting this on the plot, we report the number of *missing* handshakes, i.e., the number of connections where the handshakes were never seen, because the trace capture started after these handshakes were already complete.
+This is for completion.
+
+The main point this figure makes is that the percentage of handshake RTTs is sufficiently low such that we can avoid collecting them without any significant penalty. This holds true even for `smallFlows.pcap` (~8.6% of all RTTs are handshake RTTs).
+
+### Step 4: Reproducing a figure equivalent to Figure 13
+
+### Step 5: Reproducing a figure equivalent to Figure 14
+
+
+## Cleanup
+
+Please clean up after yourself so that other AEC evaluators can start from scratch, and can perform all the above steps without needing to care about existing files/plots.
+We provide the script `cleanup.sh` for this purpose.
+
+1. Please ensure you are in the parent git directory by executing:
+```
+cd ~/sigcomm22-paper67-artifacts
+```
+
+2. Please execute the cleanup script by executing:
+```
+./cleanup.sh
+```

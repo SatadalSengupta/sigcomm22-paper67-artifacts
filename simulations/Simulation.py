@@ -185,42 +185,6 @@ class Simulation(object):
 
     ##################################################
 
-    def _build_packets_data(self):
-
-        t_format = "%Y-%m-%d %H:%M:%S"
-        t_start  = datetime.now()
-        self._custom_print("{} Round {}/{}: Build packets data starts at time: {}".format(self._time_elapsed(), self._round_number, self._max_round_number, t_start.strftime(t_format)))
-
-        local_packets_path   = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets_round_0.pickle")
-        process_packets_path = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets_round_{}.pickle".format(self._round_number))
-        if not os.path.exists(process_packets_path):
-            copy(local_packets_path, process_packets_path)
-        # process_packets_path = local_packets_path
-
-        with open(process_packets_path, "rb") as packets_fp:
-            self._packets = pickle.load(packets_fp)
-        
-        ## Temp
-        # self._packets = self._packets[:25000]
-        # packets = packets[:1000000]
-        
-        # if self._test and len(packets) > 1000:
-        #     packets = packets[:len(packets)//100]
-
-        ## Populate no. of total packets
-        self._total_packets_count = len(self._packets)
-
-        # self._custom_print("{} Round {}/{}: Clean up process packets data".format(self._time_elapsed(), self._round_number, self._max_round_number))
-        # if os.path.exists(process_packets_path):
-        #     os.remove(process_packets_path)
-        
-        t_end     = datetime.now()
-        t_elapsed = round((t_end - t_start)/timedelta(minutes=1), 2)
-        self._custom_print("{} Round {}/{}: Build packets complete at time: {}; time elapsed: {} mins.".format(
-                            self._time_elapsed(), self._round_number, self._max_round_number, t_end.strftime(t_format), t_elapsed))
-
-    ##################################################
-
     def _retrieve_packets_data(self, count_data):
 
         t_format = "%Y-%m-%d %H:%M:%S"

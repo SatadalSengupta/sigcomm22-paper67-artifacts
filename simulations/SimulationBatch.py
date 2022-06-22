@@ -84,10 +84,6 @@ class SimulationBatch(object):
         self._custom_print("Create directory: {}".format(self._simulation_batch_dir))
         os.makedirs(self._simulation_batch_dir)
 
-        # ## Load all packets in trace inside a massive list
-        # self._custom_print("Build packets data")
-        # self._packets = self._build_packets_data()
-
         ## Determine execution script path
         if not os.path.exists("scripts"):
             os.makedirs("scripts")
@@ -99,9 +95,6 @@ class SimulationBatch(object):
         ## Determine log file path
         datetime_str = datetime.now().strftime("%Y%m%d_%H%M")
         self._log_file = os.path.join(self._simulation_batch_dir, "sim_log_{}.txt".format(datetime_str))
-
-        ## Copy packets file to local
-        self._prepare_local_data()
 
         ## Create parameters file
         params_lines = []
@@ -193,168 +186,6 @@ class SimulationBatch(object):
 
     ##################################################
 
-    def _clean_packets_data(self):
-
-        all_packets_meandata = []
-        remote_src = self._tcptrace_data_paths["seq_pkts_pickle"]
-        remote_dst = os.path.dirname(remote_src)
-        local_src_dir = "/scratch/satadals/packets_meandata_dir"
-        if not os.path.exists(local_src_dir):
-            os.makedirs(local_src_dir)
-        
-        for seq_count in range(14):
-            remote_src_path = remote_src.format(str(seq_count).zfill(2))
-            local_src_path  = os.path.join(local_src_dir, "packets_meandata_{}.pickle".format(str(seq_count).zfill(2)))
-            copy(remote_src_path, local_src_path)
-
-            self._custom_print("Process packets list from: {}".format(remote_src_path))
-            with open(local_src_path, "rb") as packets_fp:
-                seq_packets = pickle.load(packets_fp)
-
-            # packets_meandata = []
-            # for packet in seq_packets:
-            #     # packet_mindata = {}
-            #     # packet_mindata["pktno"]     = packet["pktno"]
-            #     # packet_mindata["timestamp"] = packet["timestamp"]
-            #     # packet_mindata["ipsrc"]     = packet["ipsrc"]
-            #     # packet_mindata["ipdst"]     = packet["ipdst"]
-            #     # packet_mindata["tcpsrc"]    = packet["tcpsrc"]
-            #     # packet_mindata["tcpdst"]    = packet["tcpdst"]
-            #     # packet_mindata["tcpflags"]  = packet["tcpflags"]
-            #     # packet_mindata["seqno"]     = packet["seqno"]
-            #     # packet_mindata["ackno"]     = packet["ackno"]
-            #     # packet_mindata["pktsize"]   = packet["pktsize"]
-            #     packet_meandata = (packet["pktno"], packet["timestamp"], packet["ipsrc"], packet["ipdst"],
-            #                       packet["tcpsrc"], packet["tcpdst"], packet["tcpflags"],
-            #                       packet["seqno"], packet["ackno"], packet["pktsize"])
-            #     packets_meandata.append(packet_meandata)
-            
-            all_packets_meandata.extend(seq_packets)
-            
-            # local_dst_path  = os.path.join(local_dst_dir, "packets_meandata_{}.pickle".format(str(seq_count).zfill(2)))
-            # remote_dst_path = os.path.join(remote_dst, "packets_meandata_{}.pickle".format(str(seq_count).zfill(2)))
-                
-            # self._custom_print("Dump packets to: {}".format(local_dst_path))
-            # with open(local_dst_path, "wb") as packets_fp:
-            #     pickle.dump(packets_meandata, packets_fp)
-            
-            # move(local_dst_path, remote_dst_path)
-            os.remove(local_src_path)
-        
-        local_dst_path  = os.path.join(local_src_dir, "all_packets_meandata.pickle")
-        remote_dst_path = os.path.join(remote_dst, "all_packets_meandata.pickle")
-        self._custom_print("Dump packets to: {}".format(local_dst_path))
-        with open(local_dst_path, "wb") as packets_fp:
-            pickle.dump(all_packets_meandata, packets_fp)
-        copy(local_dst_path, remote_dst_path)
-        self._custom_print("Cleaned data!")
-
-        return
-
-    ##################################################
-
-    def _build_packets_data(self):
-
-        t_format = "%Y-%m-%d %H:%M:%S"
-        t_start  = datetime.now()
-        self._custom_print("Build packets data starts at time: {}".format(t_start.strftime(t_format)))
-
-        remote_packets_path = self._tcptrace_data_paths["all_pkts_pickle"]
-        if self._test:
-            remote_packets_path = self._tcptrace_data_paths["test_pkts_pickle"]
-        
-        # self._custom_print("BEFORE check path existence: {}".format(os.path.exists(self._tcptrace_data_paths["local_directory"])))
-        if not os.path.exists(self._tcptrace_data_paths["local_directory"]):
-            # self._custom_print("WITHIN check path existence: {}".format(os.path.exists(self._tcptrace_data_paths["local_directory"])))
-            os.makedirs(self._tcptrace_data_paths["local_directory"])
-        # self._custom_print("AFTER check path existence: {}".format(os.path.exists(self._tcptrace_data_paths["local_directory"])))
-        local_packets_path = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets.pickle")
-        copy(remote_packets_path, local_packets_path)
-
-        with open(local_packets_path, "rb") as packets_fp:
-            packets = pickle.load(packets_fp)
-        
-        ## Temp
-        # packets = packets[:250000]
-        # packets = packets[:100000]
-        
-        # if self._test and len(packets) > 1000:
-        #     packets = packets[:len(packets)//100]
-        
-        t_end     = datetime.now()
-        t_elapsed = round((t_end - t_start)/timedelta(minutes=1), 2)
-        self._custom_print("Build packets complete at time: {}; time elapsed: {} mins.".format(t_end.strftime(t_format), t_elapsed))
-
-        return packets
-
-        # ## Load from existing packets dict
-        # if os.path.exists(self._tcptrace_data_paths["all_pkts_pickle"]):
-        #     self._custom_print("Loading existing packets list")
-        #     with open(self._tcptrace_data_paths["all_pkts_pickle"], "rb") as packets_fp:
-        #         packets = pickle.load(packets_fp)
-        #     return packets
-
-        # ## Built complete packets dict
-        # if not os.path.exists(os.path.dirname(self._tcptrace_data_paths["all_pkts_pickle"])):
-        #     os.makedirs(os.path.dirname(self._tcptrace_data_paths["all_pkts_pickle"]))
-        # packets = []
-        # for seq_count in range(14):
-        #     packets_path = self._tcptrace_data_paths["seq_pkts_pickle"].format(str(seq_count).zfill(2))
-        #     self._custom_print("Extending packets list with packets from: {}".format(packets_path))
-        #     with open(packets_path, "rb") as packets_fp:
-        #         seq_packets = pickle.load(packets_fp)
-        #         packets.extend(seq_packets)
-        # self._custom_print("Dumping packets list to: {}".format(self._tcptrace_data_paths["all_pkts_pickle"]))
-        # with open(self._tcptrace_data_paths["all_pkts_pickle"], "wb") as packets_fp:
-        #     pickle.dump(packets, packets_fp)
-        # return packets
-
-    ##################################################
-
-    def _remove_packets_data(self):
-
-        self._custom_print("Clean up local packets data")
-        # local_packets_path = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets.pickle")
-        # if os.path.exists(local_packets_path):
-        #     os.remove(local_packets_path)
-
-        if os.path.exists(self._tcptrace_data_paths["local_directory"]):
-            local_packets_path = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets_round_{}.pickle")
-            for count in range(self._tcptrace_data_paths["part_pkts_count"]):
-                curr_local_packets_path  = local_packets_path.format(str(count).zfill(2))
-                if os.path.exists(curr_local_packets_path):
-                    os.remove(curr_local_packets_path)
-
-    ##################################################
-
-    def _prepare_local_data(self):
-
-        self._custom_print("Copy packets data file")
-
-        # remote_packets_path = self._tcptrace_data_paths["all_pkts_pickle"]
-        # if self._test:
-        #     remote_packets_path = self._tcptrace_data_paths["test_pkts_pickle"]
-        
-        # if not os.path.exists(self._tcptrace_data_paths["local_directory"]):
-        #     os.makedirs(self._tcptrace_data_paths["local_directory"])
-
-        # local_packets_path = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets_round_0.pickle")
-        # if not os.path.exists(local_packets_path):
-        #     copy(remote_packets_path, local_packets_path)
-
-        remote_packets_path = self._tcptrace_data_paths["part_pkts_pickle"]
-        if not os.path.exists(self._tcptrace_data_paths["local_directory"]):
-            os.makedirs(self._tcptrace_data_paths["local_directory"])
-        local_packets_path = os.path.join(self._tcptrace_data_paths["local_directory"], "local_packets_round_{}.pickle")
-
-        for count in range(self._tcptrace_data_paths["part_pkts_count"]):
-            curr_remote_packets_path = remote_packets_path.format(str(count).zfill(2))
-            curr_local_packets_path  = local_packets_path.format(str(count).zfill(2))
-            if not os.path.exists(curr_local_packets_path):
-                copy(curr_remote_packets_path, curr_local_packets_path)
-
-    ##################################################
-
     def _augment_execution_script(self, simulation_parameters):
 
         params_str = json.dumps(simulation_parameters)
@@ -399,7 +230,6 @@ class SimulationBatch(object):
 
         copy(self._local_exec_script, self._remote_exec_script)
         proc = subprocess.run(self._local_exec_script)
-        # self._remove_packets_data()
 
     ##################################################
 

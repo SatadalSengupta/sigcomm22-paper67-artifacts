@@ -64,14 +64,14 @@ def plot_tcptrace_comparison():
     
     plt.figure(figsize=(12,8))
     x = ["Dart(-SYN)", "tcptrace(-SYN)", "Dart(+SYN)", "tcptrace(+SYN)"]
-    y = [round(len(dart_inf_mem_nosyn)/1000000, 2), round(len(tcptrace_rtts_nosyn)/1000000, 2), 
-            round(len(dart_inf_mem_syn)/1000000, 2), round(len(tcptrace_rtts_all)/1000000, 2)]
+    y = [round(len(dart_inf_mem_nosyn)/1000, 2), round(len(tcptrace_rtts_nosyn)/1000, 2), 
+            round(len(dart_inf_mem_syn)/1000, 2), round(len(tcptrace_rtts_all)/1000, 2)]
     bars = plt.barh(x, y)
     bars[0].set_color('r')
     bars[2].set_color('r')
     for i, v in enumerate(y):
-        plt.text(v, i, str(v)+" M", color='grey', fontweight='bold')
-    plt.xlabel("No. of RTT samples (million)")
+        plt.text(v, i, str(v)+" K", color='grey', fontweight='bold')
+    plt.xlabel("No. of RTT samples (thousand)")
     plt.ylabel("RTT Tool (+/- handshake RTT)")
     plt.tight_layout()
     # plt.savefig("/u/satadals/scratch/trace_04_07_2020/tcptrace_inf_mem_count.png", format="png", dpi=300)
@@ -156,7 +156,7 @@ def plot_tcptrace_comparison():
     indices = []
     for j, x in enumerate(X):
         if xlog:
-            # idx = np.round(np.logspace(0, math.log10(len(x) - 1), 1000000)).astype(int)
+            # idx = np.round(np.logspace(0, math.log10(len(x) - 1), 1000)).astype(int)
             idx = [i for i in range(cutoff_indices[j], len(x))]
         else:
             idx = np.round(np.linspace(0, len(x) - 1, 100000)).astype(int)

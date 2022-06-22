@@ -23,7 +23,7 @@ def main():
     
     packets_count = 0
 
-    for packet in packets:
+    for packet_data in packets:
 
         packet = {}
         packet["pktno"], packet["timestamp"], packet["ipsrc"], packet["ipdst"], packet["tcpsrc"], \

@@ -1,72 +1,7 @@
-from SimulationBatch import SimulationBatch
 from datetime import datetime, timedelta
+from TCPTraceConst import TCPTraceConst
+import pickle
 import os
-
-##################################################
-
-IS_TEST = False
-
-##################################################
-
-def run_simulations_batch():
-
-    local_path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate"
-    
-    tcptrace_data_paths = {
-                            "p4rtt_simulations_dir": os.path.join(local_path, "dart_simulations_infmem"),
-                            "part_pkts_pickle": os.path.join(local_path, "smallFlows.pickle"),
-                            "part_pkts_count": 1,
-                            "total_packets_count": 14261,
-                        }
-
-    flowtab_params = {
-                        "num_stages": [1, ],
-                        "max_size":  [1024, ],
-                        "recirculations": [1, ],
-                        "prefer_new": [True, ],
-                        "eviction_stage": ["start", ],
-                        "entry_timeout": [None, ],
-                        "sampling_threshold": [None, ],
-                        "sampling_rate": [1.0, ],
-                        "syn_action": ["include", "ignore"],
-                        "syn_timeout_entry_timeout": [None, ],
-                        "syn_staging_num_stages": [1, ],
-                        "syn_staging_max_size": [1024, ],
-                        "syn_staging_recirculations": [1, ],
-                        "syn_staging_prefer_new": [True, ],
-                        "syn_staging_eviction_stage": ["start", ],
-                        "syn_staging_entry_timeout": [500, ],
-                        "log_interval": [2000, ]
-                    }
-
-    packettab_params = {
-                            "num_stages": [1, ],
-                            "max_size": [1024, ],
-                            "recirculations": [1, ],
-                            "prefer_new": [True, ],
-                            "eviction_stage": ["start", ],
-                            "entry_timeout": [None, ],
-                            "sampling_threshold": [None, ],
-                            "sampling_rate": [1.0, ],
-                            "log_interval": [2000, ]
-                        }
-
-    apxflowtab_params = {
-                            "enable_apxft": [False],
-                            "num_stages": [1, ],
-                            "max_size": [256, ],
-                            "recirculations": [1, ],
-                            "prefer_new": [True, ],
-                            "eviction_stage": ["start", ],
-                            "entry_timeout": [None, ],
-                            "sampling_threshold": [None, ],
-                            "sampling_rate": [1.0, ],
-                            "log_interval": [2000, ]
-                        }
-        
-    simulation_batch = SimulationBatch(tcptrace_data_paths = tcptrace_data_paths, flowtab_params = flowtab_params,
-                                        packettab_params = packettab_params, apxflowtab_params = apxflowtab_params, test = IS_TEST)
-    simulation_batch.p4rtt_simulate_batch()
 
 ##################################################
 
@@ -75,7 +10,60 @@ def main():
     t_format = "%Y-%m-%d %H:%M:%S"
     t_start  = datetime.now()
     print("Starting simulations at time: {}".format(t_start.strftime(t_format)))
-    run_simulations_batch()
+
+    local_path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations_infmem"
+
+    tcptrace_const_syn   = TCPTraceConst(local_path, 2000)
+    tcptrace_const_nosyn = TCPTraceConst(local_path, 2000)
+    firstEntryTime = 0
+    
+    process_packets_path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/smallFlows.pickle"
+    with open(process_packets_path, "rb") as packets_fp:
+        packets = pickle.load(packets_fp)
+    
+    packets_count = 0
+
+    for packet in packets:
+
+        packet = {}
+        packet["pktno"], packet["timestamp"], packet["ipsrc"], packet["ipdst"], packet["tcpsrc"], \
+            packet["tcpdst"], packet["tcpflags"], packet["seqno"], packet["ackno"], packet["pktsize"] = packet_data
+        packet["tcpflags"] = packet["tcpflags"][2:]
+
+        if packets_count == 0:
+            firstEntryTime = packet["timestamp"]
+            tcptrace_const_syn._firstEntryTime   = packet["timestamp"]
+            tcptrace_const_nosyn._firstEntryTime = packet["timestamp"]
+
+        latest_tstamp = packet["timestamp"]
+            
+        tcptrace_const_syn.process_tcptrace_SEQ(packet, allow_syn=True)
+        tcptrace_const_nosyn.process_tcptrace_SEQ(packet, allow_syn=False)
+
+        tcptrace_const_syn.process_tcptrace_ACK(packet, allow_syn=True)
+        tcptrace_const_nosyn.process_tcptrace_ACK(packet, allow_syn=False)
+            
+        packets_count += 1
+    
+    tcptrace_const_syn.concludeRTTDict()
+    tcptrace_const_nosyn.concludeRTTDict()
+
+    tcptrace_syn_rtt_all = []
+    for flow_key in tcptrace_const_syn._tcptrace_rtt_samples:
+        tcptrace_syn_rtt_all.extend([t[1] for t in tcptrace_const_syn._tcptrace_rtt_samples[flow_key]])
+    
+    tcptrace_nosyn_rtt_all = []
+    for flow_key in tcptrace_const_nosyn._tcptrace_rtt_samples:
+        tcptrace_nosyn_rtt_all.extend([t[1] for t in tcptrace_const_nosyn._tcptrace_rtt_samples[flow_key]])
+
+    with open(os.path.join(local_path, "rtt_samples_tcptrace_const_syn.txt"), "w") as fp:
+        lines = ["{}".format(point) for point in tcptrace_syn_rtt_all]
+        fp.write("\n".join(lines))
+    
+    with open(os.path.join(local_path, "rtt_samples_tcptrace_const_nosyn.txt"), "w") as fp:
+        lines = ["{}".format(point) for point in tcptrace_nosyn_rtt_all]
+        fp.write("\n".join(lines))
+
     t_end = datetime.now()
     t_elapsed = round((t_end - t_start)/timedelta(minutes=1), 2)
     print("Simulations complete at time: {}".format(t_end.strftime(t_format)))

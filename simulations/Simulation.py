@@ -786,8 +786,8 @@ class Simulation(object):
 
         ## Plot RTT comparison
         self._tcptrace_const.concludeRTTDict()
-        self._plotter.plotPerformanceComparison(self._tcptrace_const._tcptrace_rtt_samples, self._p4rtt_rtt_samples,
-                                                self._tcptrace_const._tcptrace_sample_count, self._p4rtt_sample_count)
+        # self._plotter.plotPerformanceComparison(self._tcptrace_const._tcptrace_rtt_samples, self._p4rtt_rtt_samples,
+        #                                         self._tcptrace_const._tcptrace_sample_count, self._p4rtt_sample_count)
         
         ## Save RTT Samples
         ### P4RTT

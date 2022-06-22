@@ -84,7 +84,7 @@ class TCPTraceConst(object):
 
     ##################################################
 
-    def process_tcptrace_SEQ(self, packet):
+    def process_tcptrace_SEQ(self, packet, allow_syn=False):
 
         ## Logging
         self._create_tcptrace_snapshot(packet["timestamp"])
@@ -101,8 +101,12 @@ class TCPTraceConst(object):
         is_pure_ack = packet["tcpflags"] == "-A----" and packet["pktsize"] == 0
         
         # if is_syn or is_fin or is_rst or is_pure_ack: # No SYN and no FIN
-        # if is_rst or is_pure_ack: # SYN allowed
-        if is_syn or is_rst or is_pure_ack: # SYN not allowed
+        if allow_syn and (is_rst or is_pure_ack): # SYN allowed
+            if self._test: self._custom_print("TCPTRACE SEQ FT:: Packet is either a SYN, FIN, or RST packet or a pure ACK; DROP: {}".format(flow_key))
+            ## Set action
+            actionable_ft2pt = ("drop", None)
+        
+        elif (not allow_syn) and (is_syn or is_rst or is_pure_ack): # SYN not allowed
             if self._test: self._custom_print("TCPTRACE SEQ FT:: Packet is either a SYN, FIN, or RST packet or a pure ACK; DROP: {}".format(flow_key))
             ## Set action
             actionable_ft2pt = ("drop", None)
@@ -171,7 +175,7 @@ class TCPTraceConst(object):
 
     ##################################################
 
-    def process_tcptrace_ACK(self, packet):
+    def process_tcptrace_ACK(self, packet, allow_syn=False):
 
         ## Logging
         self._create_tcptrace_snapshot(packet["timestamp"])
@@ -195,9 +199,12 @@ class TCPTraceConst(object):
         is_rst = "R" in packet["tcpflags"]
         is_not_ack = "A" not in packet["tcpflags"]
 
-        # if is_pure_syn or is_rst or is_not_ack: # SYN-ACK allowed
         # if is_syn or is_fin or is_rst or is_not_ack: # No SYN, no FIN
-        if is_syn or is_rst or is_not_ack: # SYN-ACK not allowed
+        if allow_syn and (is_pure_syn or is_rst or is_not_ack): # SYN-ACK allowed
+            if self._test: self._custom_print("TCPTRACE ACK FT:: Flow key: {} || Either SYN, FIN, RST ACK set or ACK not set; DROP".format(flow_key))
+            actionables_ft2pt = ("drop", None)
+        
+        elif (not allow_syn) and (is_syn or is_rst or is_not_ack): # SYN-ACK not allowed
             if self._test: self._custom_print("TCPTRACE ACK FT:: Flow key: {} || Either SYN, FIN, RST ACK set or ACK not set; DROP".format(flow_key))
             actionables_ft2pt = ("drop", None)
         

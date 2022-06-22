@@ -20,27 +20,27 @@ plt.rc('legend',fontsize=23)
 
 ########################################
 
-def compute_tcptrace_mean_rtt():
+# def compute_tcptrace_mean_rtt():
 
-    path = "/u/satadals/scratch/trace_04_07_2020"
-    path_tcptrace_rtts_all   = os.path.join(path, "tcptrace_rtts_all.txt")
+#     path = "/u/satadals/scratch/trace_04_07_2020"
+#     path_tcptrace_rtts_all = os.path.join(path, "tcptrace_rtts_all.txt")
 
-    with open(path_tcptrace_rtts_all) as fp:
-        tcptrace_rtts_all   = [int(line.strip()) for line in fp.readlines()]
+#     with open(path_tcptrace_rtts_all) as fp:
+#         tcptrace_rtts_all   = [int(line.strip()) for line in fp.readlines()]
     
-    print(np.mean(tcptrace_rtts_all))
+#     print(np.mean(tcptrace_rtts_all))
 
 ########################################
 
 def plot_tcptrace_comparison():
 
-    path = "/u/satadals/scratch/trace_04_07_2020"
+    path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate"
     path_tcptrace_rtts_all   = os.path.join(path, "tcptrace_rtts_all.txt")
     path_tcptrace_rtts_nosyn = os.path.join(path, "tcptrace_rtts_nosyn.txt")
     path_tcptrace_rtts_syn   = os.path.join(path, "tcptrace_rtts_syn.txt")
-    path = "/u/satadals/scratch/simulations"
-    path_dart_inf_mem_syn   = os.path.join(path, "simulation_batch_026/simulation_round_0/rtt_samples_tcptrace_const.txt")
-    path_dart_inf_mem_nosyn = os.path.join(path, "simulation_batch_027/simulation_round_0/rtt_samples_tcptrace_const.txt")
+    path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations_infmem"
+    path_dart_inf_mem_syn   = os.path.join(path, "rtt_samples_tcptrace_const_syn.txt")
+    path_dart_inf_mem_nosyn = os.path.join(path, "rtt_samples_tcptrace_const_nosyn.txt")
 
     with open(path_tcptrace_rtts_all) as fp:
         tcptrace_rtts_all   = [int(line.strip()) for line in fp.readlines()]
@@ -75,7 +75,7 @@ def plot_tcptrace_comparison():
     plt.ylabel("RTT Tool (+/- handshake RTT)")
     plt.tight_layout()
     # plt.savefig("/u/satadals/scratch/trace_04_07_2020/tcptrace_inf_mem_count.png", format="png", dpi=300)
-    plt.savefig("/u/satadals/scratch/trace_04_07_2020/tcptrace_inf_mem_count.pdf", format="pdf", dpi=300)
+    plt.savefig("/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_9_equivalent.pdf", format="pdf", dpi=300)
     plt.close()
     plt.clf()
     print("Plot 1 complete")
@@ -210,7 +210,7 @@ def plot_tcptrace_comparison():
     plt.legend()
     plt.tight_layout()
     # out_path = "/u/satadals/scratch/trace_04_07_2020/tcptrace_inf_mem_dist_cdf_linx_liny_le125.pdf"
-    out_path = "/u/satadals/scratch/trace_04_07_2020/tcptrace_inf_mem_dist_cdf_logx_logy_ge100_le1000s.pdf"
+    out_path = "/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_11_equivalent.pdf"
     plt.savefig(out_path, format="pdf", dpi=300)
     # plt.savefig("tcptrace_inf_mem.pdf", format="pdf", dpi=300)
     plt.close()
@@ -221,8 +221,8 @@ def plot_tcptrace_comparison():
 
 def main():
 
-    # plot_tcptrace_comparison()
-    compute_tcptrace_mean_rtt()
+    plot_tcptrace_comparison()
+    # compute_tcptrace_mean_rtt()
 
 ########################################
 

@@ -149,7 +149,8 @@ In order to allow other AEC evaluators to execute our code without issues, pleas
 Wait until the process has exited.
 
 2. Performing **1** should also kill the process on the terminal where `run_switchd.sh` was running.
-Please double-check.
+You should see the message `bfshell> Receive failed`.
+Please double-check that this is indeed the case.
 
 3. Double-check that the `tcpreplay` and `tcpdump` processes have also exited.
 

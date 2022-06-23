@@ -243,7 +243,7 @@ This is only for completion and to show an interesting fact about `smallFlows.pc
 The main point Figure 12 makes in the paper is that the percentage of handshake RTTs is sufficiently low such that we can avoid collecting them without any significant penalty.
 The current plot shows that this holds true even for `smallFlows.pcap` (only ~13% of all RTTs are handshake RTTs).
 
-### Step 4: Reproducing figures equivalent to Figure 13 and 14
+### Step 5: Reproducing figures equivalent to Figure 13 and 14
 
 1. Execute the following command to perform simulations for Dart with different PT memory sizes:
 ```

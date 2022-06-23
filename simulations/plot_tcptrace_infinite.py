@@ -134,6 +134,7 @@ def plot_rtt_distribution_comparison(tcptrace_rtts_all, tcptrace_rtts_nosyn, dar
     else:
         plt.ylabel("CCDF (1-CDF)")
         plt.xlim(100, 10000)
+        plt.ylim(0.000001, 0.1)
 
     if xlog:
         plt.xscale("log")

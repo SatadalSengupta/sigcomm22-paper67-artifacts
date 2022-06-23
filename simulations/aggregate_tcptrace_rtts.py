@@ -69,7 +69,7 @@ def aggregate_rtts():
                         # Non-handshake RTTs
                         if conn_tuple not in tcptrace_rtts_nosyn:
                             tcptrace_rtts_nosyn[conn_tuple] = []
-                        tcptrace_rtts_nosyn.append((seq_num, rtt))
+                        tcptrace_rtts_nosyn[conn_tuple].append((seq_num, rtt))
 
     with open(os.path.join(OUTPUT_PATH, "tcptrace_rtts_all.pickle"), "wb") as fp:
         pickle.dump(tcptrace_rtts_all, fp)

@@ -15,7 +15,8 @@ def compare_tcptrace_and_dartmeminf_rtts(dart_rtts):
         missing_rtts = set(tcptrace_rtts[fkey]) - set(dart_rtts[fkey])
         if len(missing_rtts) > 0:
             print(fkey)
-            print(missing_rtts)
+            print(tcptrace_rtts[fkey])
+            print(dart_rtts[fkey])
             break
 
     return

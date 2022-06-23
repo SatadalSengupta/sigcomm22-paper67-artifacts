@@ -1,11 +1,11 @@
-import enum
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-import random
-import math
+import pickle
 import os
+
+########################################
 
 sns.set()
 sns.set_style("whitegrid")
@@ -22,19 +22,30 @@ plt.rc('legend',fontsize=23)
 def plot_rtt_samples_comparison():
 
     path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate"
-    path_tcptrace_rtts_all   = os.path.join(path, "tcptrace_rtts_all.txt")
-    path_tcptrace_rtts_nosyn = os.path.join(path, "tcptrace_rtts_nosyn.txt")
-    path_tcptrace_rtts_syn   = os.path.join(path, "tcptrace_rtts_syn.txt")
+    path_tcptrace_rtts_all   = os.path.join(path, "tcptrace_rtts_all.pickle")
+    path_tcptrace_rtts_nosyn = os.path.join(path, "tcptrace_rtts_nosyn.pickle")
     path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations_infmem"
     path_dart_inf_mem_syn   = os.path.join(path, "rtt_samples_tcptrace_const_syn.txt")
     path_dart_inf_mem_nosyn = os.path.join(path, "rtt_samples_tcptrace_const_nosyn.txt")
 
-    with open(path_tcptrace_rtts_all) as fp:
-        tcptrace_rtts_all   = [int(line.strip()) for line in fp.readlines()]
-    with open(path_tcptrace_rtts_nosyn) as fp:
-        tcptrace_rtts_nosyn = [int(line.strip()) for line in fp.readlines()]
-    with open(path_tcptrace_rtts_syn) as fp:
-        tcptrace_rtts_syn   = [int(line.strip()) for line in fp.readlines()]
+    tcptrace_rtts_all = []
+    with open(path_tcptrace_rtts_all, "rb") as fp:
+        data = pickle.load(fp)
+        for conn_tuple in data:
+            for sample in data[conn_tuple]:
+                tcptrace_rtts_all.append(sample[1])
+    
+    tcptrace_rtts_nosyn = []
+    with open(path_tcptrace_rtts_nosyn, "rb") as fp:
+        data = pickle.load(fp)
+        for conn_tuple in data:
+            for sample in data[conn_tuple]:
+                tcptrace_rtts_nosyn.append(sample[1])
+
+    # with open(path_tcptrace_rtts_all) as fp:
+    #     tcptrace_rtts_all   = [int(line.strip()) for line in fp.readlines()]
+    # with open(path_tcptrace_rtts_nosyn) as fp:
+    #     tcptrace_rtts_nosyn = [int(line.strip()) for line in fp.readlines()]
     with open(path_dart_inf_mem_syn) as fp:
         dart_inf_mem_syn   = [float(line.strip()) for line in fp.readlines()]
     with open(path_dart_inf_mem_nosyn) as fp:

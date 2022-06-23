@@ -161,7 +161,7 @@ def plot_error (x_axis, sim_path, plt_path, x_label, with_abs=False, with_max=Fa
 def plot_memory_comparison():
 
     print("Plot error rate vs. memory\n")
-    sim_path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations/simulation_batch_001"
+    sim_path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations/simulation_batch_000"
     plt_path = "/home/ubuntu/sigcomm22-paper67-artifacts/plots/pt_table_memory{}{}.{}"
     x_axis   = [1024, 2048, 4096, 8192, 16384, 32768, 65536]
     x_label  = "PT Table Memory Size"

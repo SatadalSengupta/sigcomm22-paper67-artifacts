@@ -27,11 +27,11 @@ In this section of the README, we explain the steps to execute to log in to the 
 
 ### Step 1: Logging into the AWS EC2 Instance
 
-1. Copy the SSH key in the HotCRP comments to a text file called `sigcomm22-paper67-aws-key.pem`.
+1. Download the SSH key attached in the HotCRP comments. It is a text file called `sigcomm22-paper67-aws-key.pem`.
 
 2. Move this file to your system's `.ssh` directory by executing in a terminal:
 ```
-mv sigcomm22-paper67-aws-key.pem ~/.ssh
+mv sigcomm22-paper67-aws-key.pem ~/.ssh/
 ```
 
 3. Change the file permissions of the SSH key file to one permitted by AWS, by executing in a terminal:

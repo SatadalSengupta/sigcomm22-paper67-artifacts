@@ -58,7 +58,7 @@ Please perform both the following steps (1 & 2) to confirm that you are the only
 ```
 ps -ef | grep run_tofino_model | wc -l
 ```
-If the response is `1`, you are the only active AEC evaluator; please proceed with **Step 3**.
+If the response is `1`, you are the only active AEC evaluator; please proceed with *2*.
 If the response is `2` or more, someone else is actively executing the Tofino processes and you should try later once they are finished.
 If they seem to be active for too long (e.g., hours), it is possible that the evaluator forgot to kill the processes once they completed their evaluation; please reach out to them via HotCRP or otherwise in that case.
 
@@ -66,7 +66,7 @@ If they seem to be active for too long (e.g., hours), it is possible that the ev
 ```
 ps -ef | grep run_switchd | wc -l
 ```
-If the response is `1`, you are the only active AEC evaluator.
+If the response is `1`, you are the only active AEC evaluator; please proceed with **Step 3**.
 If the response is `2` or more, someone else is actively executing the Tofino processes and you should try later once they are finished.
 If they seem to be active for too long (e.g., hours), it is possible that the evaluator forgot to kill the processes once they completed their evaluation; please reach out to them via HotCRP or otherwise in that case.
 

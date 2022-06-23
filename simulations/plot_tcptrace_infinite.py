@@ -10,7 +10,6 @@ import os
 sns.set()
 sns.set_style("whitegrid")
 font = {'family' : 'serif',
-        # 'weight' : 'bold',
         'size'   : 25}
 matplotlib.rc('font', **font)
 plt.rc('xtick',labelsize=23)
@@ -20,19 +19,7 @@ plt.rc('legend',fontsize=23)
 
 ########################################
 
-# def compute_tcptrace_mean_rtt():
-
-#     path = "/u/satadals/scratch/trace_04_07_2020"
-#     path_tcptrace_rtts_all = os.path.join(path, "tcptrace_rtts_all.txt")
-
-#     with open(path_tcptrace_rtts_all) as fp:
-#         tcptrace_rtts_all   = [int(line.strip()) for line in fp.readlines()]
-    
-#     print(np.mean(tcptrace_rtts_all))
-
-########################################
-
-def plot_tcptrace_comparison():
+def plot_rtt_samples_comparison():
 
     path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate"
     path_tcptrace_rtts_all   = os.path.join(path, "tcptrace_rtts_all.txt")
@@ -52,15 +39,11 @@ def plot_tcptrace_comparison():
         dart_inf_mem_syn   = [float(line.strip()) for line in fp.readlines()]
     with open(path_dart_inf_mem_nosyn) as fp:
         dart_inf_mem_nosyn = [float(line.strip()) for line in fp.readlines()]
-    # with open(path_dart_inf_mem_syn) as fp:
-    #     dart_inf_mem_syn   = [int(round(float(line.strip()))) for line in fp.readlines()]
-    # with open(path_dart_inf_mem_nosyn) as fp:
-    #     dart_inf_mem_nosyn = [int(round(float(line.strip()))) for line in fp.readlines()]
 
-    print("Dart(-SYN): {}".format(len(dart_inf_mem_nosyn)))
+    print("tcptrace(+SYN): {}".format(len(tcptrace_rtts_all)))
     print("Dart(+SYN): {}".format(len(dart_inf_mem_syn)))
     print("tcptrace(-SYN): {}".format(len(tcptrace_rtts_nosyn)))
-    print("tcptrace(+SYN): {}".format(len(tcptrace_rtts_all)))
+    print("Dart(-SYN): {}".format(len(dart_inf_mem_nosyn)))
     
     plt.figure(figsize=(12,8))
     x = ["Dart(-SYN)", "tcptrace(-SYN)", "Dart(+SYN)", "tcptrace(+SYN)"]
@@ -74,11 +57,16 @@ def plot_tcptrace_comparison():
     plt.xlabel("No. of RTT samples (thousand)")
     plt.ylabel("RTT Tool (+/- handshake RTT)")
     plt.tight_layout()
-    # plt.savefig("/u/satadals/scratch/trace_04_07_2020/tcptrace_inf_mem_count.png", format="png", dpi=300)
     plt.savefig("/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_9_equivalent.pdf", format="pdf", dpi=300)
     plt.close()
     plt.clf()
-    print("Plot 1 complete")
+    print("Plot equivalent to Figure 9 generated.")
+
+    return tcptrace_rtts_all, tcptrace_rtts_nosyn, dart_inf_mem_syn, dart_inf_mem_nosyn
+
+########################################
+
+def plot_rtt_distribution_comparison(tcptrace_rtts_all, tcptrace_rtts_nosyn, dart_inf_mem_syn, dart_inf_mem_nosyn):
 
     x1 = np.sort(tcptrace_rtts_all)
     x2 = np.sort(tcptrace_rtts_nosyn)
@@ -221,8 +209,8 @@ def plot_tcptrace_comparison():
 
 def main():
 
-    plot_tcptrace_comparison()
-    # compute_tcptrace_mean_rtt()
+    tcptrace_rtts_all, tcptrace_rtts_nosyn, dart_inf_mem_syn, dart_inf_mem_nosyn = plot_rtt_samples_comparison()
+    # plot_rtt_distribution_comparison(tcptrace_rtts_all, tcptrace_rtts_nosyn, dart_inf_mem_syn, dart_inf_mem_nosyn)
 
 ########################################
 

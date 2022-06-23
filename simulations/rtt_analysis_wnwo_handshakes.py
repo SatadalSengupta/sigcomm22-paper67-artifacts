@@ -113,7 +113,7 @@ def compare_handshake_rtts(conn_count, succ_count, all_rtts_count, handshake_rtt
 
     PLOT_PATH = "/home/ubuntu/sigcomm22-paper67-artifacts/plots"
 
-    print(f"No. of connections: {conn_count}")
+    print(f"\nNo. of connections: {conn_count}")
     print(f"No. of missing handshakes: {conn_count-succ_count}")
     print(f"No. of RTT samples: {all_rtts_count}")
     print(f"No. of handshake RTTs: {handshake_rtts_count}")

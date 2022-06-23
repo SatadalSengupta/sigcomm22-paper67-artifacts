@@ -143,9 +143,9 @@ def plot_rtt_distribution_comparison(tcptrace_rtts_all, tcptrace_rtts_nosyn, dar
     plt.tight_layout()
 
     if is_cdf:
-        out_path = "/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_11_equivalent.pdf"
+        out_path = "/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_10_equivalent.pdf"
     else:
-        out_path = "/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_12_equivalent.pdf"
+        out_path = "/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_11_equivalent.pdf"
 
     plt.savefig(out_path, format="pdf", dpi=300)
     plt.close()

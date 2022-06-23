@@ -220,18 +220,13 @@ scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.am
 
 ### Step 4: Reproducing a figure equivalent to Figure 12
 
-1. Please ensure that you are in the `simulations` directory by executing:
-```
-cd ~/sigcomm22-paper67-artifacts/simulations
-```
-
-2. Execute the following command to generate a figure equivalent to Figure 12 in the paper:
+1. Execute the following command to generate a figure equivalent to Figure 12 in the paper:
 ```
 python3 rtt_analysis_wnwo_handshakes.py
 ```
 The code reports statistics regarding connections, handshakes, and the count of RTT samples and generates a plot equivalent to Figure 12 in the paper.
 
-3. Download the generated plot to your local system to view it by executing:
+2. Download the generated plot to your local system to view it by executing:
 ```
 scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.amazonaws.com:~/sigcomm22-paper67-artifacts/plots/figure_12_equivalent.pdf <local_system_path>
 ```

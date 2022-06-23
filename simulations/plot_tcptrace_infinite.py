@@ -130,7 +130,7 @@ def plot_rtt_distribution_comparison(tcptrace_rtts_all, tcptrace_rtts_nosyn, dar
     plt.xlabel("Round-Trip Time (ms)")
     if is_cdf:
         plt.ylabel("CDF")
-        plt.xlim(0, 200)
+        plt.xlim(0, 300)
     else:
         plt.ylabel("CCDF (1-CDF)")
         plt.xlim(100, 1000)

@@ -243,10 +243,28 @@ This is only for completion and to show an interesting fact about `smallFlows.pc
 The main point Figure 12 makes in the paper is that the percentage of handshake RTTs is sufficiently low such that we can avoid collecting them without any significant penalty.
 The current plot shows that this holds true even for `smallFlows.pcap` (only ~13% of all RTTs are handshake RTTs).
 
-### Step 4: Reproducing a figure equivalent to Figure 13
+### Step 4: Reproducing figures equivalent to Figure 13 and 14
 
-### Step 5: Reproducing a figure equivalent to Figure 14
+1. Execute the following command to perform simulations for Dart with different PT memory sizes:
+```
+python3 run_dart_simulations_batch_pt_memory.py
+```
 
+2. Execute the following command to perform simulations for Dart with different number of PT stages:
+```
+python3 run_dart_simulations_batch_pt_stages.py
+```
+
+3. Execute the following commands to generate figures equivalent to Figures 13 and 14 in the paper:
+```
+python3 plot_pt_error_rate.py
+```
+
+4. Download the generated plots to your local system to view them by executing:
+```
+scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.amazonaws.com:~/sigcomm22-paper67-artifacts/plots/figure_13_equivalent.pdf <local_system_path>
+scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.amazonaws.com:~/sigcomm22-paper67-artifacts/plots/figure_14_equivalent.pdf <local_system_path>
+```
 
 ## Cleanup
 

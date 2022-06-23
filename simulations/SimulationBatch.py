@@ -75,8 +75,6 @@ class SimulationBatch(object):
             self._simulation_batch_number = max(batch_numbers) + 1
         else:
             self._simulation_batch_number = 0
-        ## Added:
-        self._simulation_batch_number = 0
 
         ## Create simulation batch directory
         self._simulation_batch_dir = os.path.join(tcptrace_data_paths["p4rtt_simulations_dir"], "simulation_batch_{}".format(

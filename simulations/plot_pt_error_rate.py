@@ -156,7 +156,7 @@ def plot_error (x_axis, sim_path, plt_path, x_label, with_abs=False, with_max=Fa
 
 def plot_memory_comparison():
 
-    print("Plot error rate vs. memory\n")
+    print("Plot error rate vs. memory")
     sim_path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations/simulation_batch_000"
     plt_path = "/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_13_equivalent.pdf"
     x_axis   = [1024, 2048, 4096, 8192, 16384, 32768, 65536]
@@ -168,9 +168,9 @@ def plot_memory_comparison():
 
 def plot_stages_comparison():
 
-    print("\nPlot error rate vs. no. of stages\n")
-    sim_path = "/u/satadals/scratch/simulations/simulation_batch_030"
-    plt_path = "/u/satadals/scratch/trace_04_07_2020/pt_table_stages{}{}.{}"
+    print("\nPlot error rate vs. no. of stages")
+    sim_path = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations/simulation_batch_001"
+    plt_path = "/home/ubuntu/sigcomm22-paper67-artifacts/plots/figure_14_equivalent.pdf"
     x_axis   = [1, 2, 3, 4, 5, 6, 7, 8]
     x_label  = "No. of Stages in PT Table"
     plot_error(x_axis, sim_path, plt_path, x_label, with_abs=False, with_max=True)
@@ -181,7 +181,7 @@ def plot_stages_comparison():
 def main():
 
     plot_memory_comparison()
-    # plot_stages_comparison()
+    plot_stages_comparison()
 
 ########################################
 

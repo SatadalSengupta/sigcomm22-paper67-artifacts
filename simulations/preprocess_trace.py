@@ -1,5 +1,5 @@
 from ipaddress import IPv4Address
-from datetime import datetime
+from datetime import datetime, timedelta
 from scapy.all import *
 import pickle
 import sys
@@ -33,7 +33,8 @@ def parse_trace(src_trace_path, dst_trace_path):
     for i, packet in enumerate(packets):
     
         if TCP in packet:
-            pkt_time = datetime.fromtimestamp(packet.time)
+            us_time  = int((float(packet.time) - int(packet.time)) * 1000000)
+            pkt_time = datetime.fromtimestamp(int(packet.time)) + timedelta(microseconds=us_time)
             src_ip   = IPv4Address(packet[IP].src)
             dst_ip   = IPv4Address(packet[IP].dst)
             src_port = int(packet[TCP].sport)
@@ -42,10 +43,6 @@ def parse_trace(src_trace_path, dst_trace_path):
             seq_num  = int(packet[TCP].seq)
             ack_num  = int(packet[TCP].ack)
             tcp_len  = len(packet[TCP].payload)
-
-            print(packet.time)
-            print(pkt_time)
-            break
 
             data.append((count, pkt_time, src_ip, dst_ip, src_port, dst_port, tcp_flgs, seq_num, ack_num, tcp_len))
             count += 1

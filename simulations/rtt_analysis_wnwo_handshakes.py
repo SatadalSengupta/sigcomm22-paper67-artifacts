@@ -87,80 +87,36 @@ def count_successful_handshakes():
 
 ########################################
 
-def collect_rtts():
+def collect_rtts_counts():
 
-    PICKLE_PATH  = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/smallFlows.pickle"
-    TCPTRACE_SMY = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_nlrZ.txt"
-    TCPTRACE_DIR = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/rtts"
-    OUTPUT_PATH  = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate"
+    ALL_RTTS_PATH = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_rtts_all.pickle"
+    HSK_RTTS_PATH = "/home/ubuntu/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_rtts_syn.pickle"
 
-    rtt_files_map = {}
-    for f in os.listdir(TCPTRACE_DIR):
-        tokens = f.split("_")[0].split("2")
-        rtt_files_map[(tokens[0], tokens[1])] = f
+    all_rtts_count       = 0
+    handshake_rtts_count = 0
 
-    connection_map = {}
-    with open(TCPTRACE_SMY) as fp:
-        lines = [r.strip() for r in fp.readlines()]
-    lc = 0
-    while lc < len(lines):
-        if "TCP connection " in lines[lc] and "TCP connection info:" not in lines[lc]:
-            host1 = lines[lc+1].split()[1].replace(":", "")
-            host2 = lines[lc+2].split()[1].replace(":", "")
-            ip1   = IPv4Address(lines[lc+1].split()[2].split(":")[0])
-            ip2   = IPv4Address(lines[lc+2].split()[2].split(":")[0])
-            port1 = int(lines[lc+1].split()[2].split(":")[1])
-            port2 = int(lines[lc+2].split()[2].split(":")[1])
-            if (host1, host2) in rtt_files_map:
-                connection_map[(ip1, ip2, port1, port2)] = rtt_files_map[(host1, host2)]
-            if (host2, host1) in rtt_files_map:
-                connection_map[(ip2, ip1, port2, port1)] = rtt_files_map[(host2, host1)]
-            lc += 3
-        lc += 1
-
-    tcptrace_rtts_all   = []
-    tcptrace_rtts_nosyn = []
-    tcptrace_rtts_syn   = []
+    with open(ALL_RTTS_PATH, "rb") as fp:
+        data = pickle.load(fp)
+        for conn_tuple in data:
+            all_rtts_count += len(data[conn_tuple])
     
-    with open(PICKLE_PATH, "rb") as fp:
-        packets = pickle.load(fp)
-    for packet in packets:
-        (_, _, src_ip, dst_ip, src_port, dst_port, tcp_flgs, seq_num, _, _) = packet
-        conn_tuple = (src_ip, dst_ip, src_port, dst_port)
-        if conn_tuple not in connection_map:
-            continue
-        with open(os.path.join(TCPTRACE_DIR, connection_map[conn_tuple])) as fp:
-            lines = [l.strip() for l in fp.readlines()]
-            for line in lines:
-                tokens  = line.split(" ")
-                rtt_seq = int(tokens[0])
-                rtt     = int(tokens[1])
-                if seq_num == rtt_seq:
-                    tcptrace_rtts_all.append(rtt)
-                    if "S" in tcp_flgs:
-                        tcptrace_rtts_syn.append(rtt)
-                    else:
-                        tcptrace_rtts_nosyn.append(rtt)
+    with open(HSK_RTTS_PATH, "rb") as fp:
+        data = pickle.load(fp)
+        for conn_tuple in data:
+            handshake_rtts_count += len(data[conn_tuple])
 
-    lines = "\n".join([str(rtt) for rtt in tcptrace_rtts_all])
-    with open(os.path.join(OUTPUT_PATH, "tcptrace_rtts_all.txt"), "w") as fp:
-        fp.write(lines)
-
-    lines = "\n".join([str(rtt) for rtt in tcptrace_rtts_nosyn])
-    with open(os.path.join(OUTPUT_PATH, "tcptrace_rtts_nosyn.txt"), "w") as fp:
-        fp.write(lines)
-                    
-    lines = "\n".join([str(rtt) for rtt in tcptrace_rtts_syn])
-    with open(os.path.join(OUTPUT_PATH, "tcptrace_rtts_syn.txt"), "w") as fp:
-        fp.write(lines)
-    
-    return len(tcptrace_rtts_all), len(tcptrace_rtts_syn)
+    return all_rtts_count, handshake_rtts_count
 
 ########################################
 
 def compare_handshake_rtts(conn_count, succ_count, all_rtts_count, handshake_rtts_count):
 
     PLOT_PATH = "/home/ubuntu/sigcomm22-paper67-artifacts/plots"
+
+    print(f"No. of connections: {conn_count}")
+    print(f"No. of missing handshakes: {conn_count-succ_count}")
+    print(f"No. of RTT samples: {all_rtts_count}")
+    print(f"No. of handshake RTTs: {handshake_rtts_count}")
 
     plt.figure(figsize=(12,8))
     x = ["All\nConnections", "Missing\nHandshakes", "All\nRTTs", "Handshake\nRTTs"]
@@ -199,7 +155,7 @@ def compare_handshake_rtts(conn_count, succ_count, all_rtts_count, handshake_rtt
 
 def main():
     conn_count, fail_count, succ_count   = count_successful_handshakes()
-    all_rtts_count, handshake_rtts_count = collect_rtts()
+    all_rtts_count, handshake_rtts_count = collect_rtts_counts()
     compare_handshake_rtts(conn_count, succ_count, all_rtts_count, handshake_rtts_count)
 
 ########################################

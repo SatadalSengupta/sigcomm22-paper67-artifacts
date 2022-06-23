@@ -7,3 +7,5 @@ rm -rf ~/sigcomm22-paper67-artifacts/simulations/intermediate/rtts
 rm -f ~/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_rtts_*.pickle
 rm -f ~/sigcomm22-paper67-artifacts/simulations/intermediate/tcptrace_rtts_*.txt
 rm -f ~/sigcomm22-paper67-artifacts/plots/figure_*_equivalent.pdf
+rm -rf ~/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations_infmem
+rm -rf ~/sigcomm22-paper67-artifacts/simulations/intermediate/dart_simulations

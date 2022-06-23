@@ -691,7 +691,8 @@ class Simulation(object):
                                             round((self._packets_count+1)/1000000, 2), round(self._total_packets_count/1000000, 2)))
                 
                 ## Handle SEQ direction if source IP is within campus and destination IP is NOT within campus
-                if self._is_home(packet["ipsrc"]) and not self._is_home(packet["ipdst"]):
+                # if self._is_home(packet["ipsrc"]) and not self._is_home(packet["ipdst"]):
+                if True:
                     if self._test:
                         self._custom_print("\nHandle SEQ direction")
                     
@@ -706,7 +707,8 @@ class Simulation(object):
                     # time_seq_p4rtt.append((dbg_time_end-dbg_time_start)/timedelta(microseconds=1))
 
                 ## Handle ACK direction if source IP is NOT within campus and destination IP is within campus
-                if not self._is_home(packet["ipsrc"]) and self._is_home(packet["ipdst"]):
+                # if not self._is_home(packet["ipsrc"]) and self._is_home(packet["ipdst"]):
+                if True:
                     if self._test:
                         self._custom_print("\nHandle ACK direction")
 
@@ -760,11 +762,11 @@ class Simulation(object):
         self._packet_table.accountant.saveSnapshots()
 
         ## Plot snapshots
-        self._custom_print("{} Round {}/{}: Plot all snapshots".format(self._time_elapsed(), self._round_number, self._max_round_number))
-        self._flow_table.accountant.plotSnapshots()
-        if self._flow_table._synAction == "staging":
-            self._flow_table._syn_table.accountant.plotSnapshots()
-        self._packet_table.accountant.plotSnapshots()
+        # self._custom_print("{} Round {}/{}: Plot all snapshots".format(self._time_elapsed(), self._round_number, self._max_round_number))
+        # self._flow_table.accountant.plotSnapshots()
+        # if self._flow_table._synAction == "staging":
+        #     self._flow_table._syn_table.accountant.plotSnapshots()
+        # self._packet_table.accountant.plotSnapshots()
         
         ## Plot RTT distribution
         self._custom_print("{} Round {}/{}: Plot RTT distribution".format(self._time_elapsed(), self._round_number, self._max_round_number))
@@ -777,8 +779,8 @@ class Simulation(object):
         for flow_key in self._tcptrace_const._tcptrace_rtt_samples:
             tcptrace_rtt_all.extend([t[1] for t in self._tcptrace_const._tcptrace_rtt_samples[flow_key]])
         
-        self._flow_table.accountant._plotMetricCDF(p4rtt_rtt_all, "rtt_samples_cdf", "red", "-", "RTT (ms) CDF ({} Samples)".format(
-                                                    self._p4rtt_sample_count))
+        # self._flow_table.accountant._plotMetricCDF(p4rtt_rtt_all, "rtt_samples_cdf", "red", "-", "RTT (ms) CDF ({} Samples)".format(
+        #                                             self._p4rtt_sample_count))
     
         ## Validation
         # self._flow_table.accountant.stateValidationInfo(self._time_elapsed())

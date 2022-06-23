@@ -182,12 +182,12 @@ cd ~/sigcomm22-paper67-artifacts/simulations
 
 2. Preprocess the network trace by executing the following command on the terminal:
 ```
-python3 -u preprocess_trace.py ../pcaps/smallFlows.pcap intermediate/smallFlows.pickle
+python3 preprocess_trace.py ../pcaps/smallFlows.pcap intermediate/smallFlows.pickle
 ```
 The pre-processed trace is now saved in the intermediate file `smallFlows.pickle`.
 We will use this pre-processed file to run our simulations.
 
-### Step 2: Reproducing figures equivalent to Figures 9&mdash;11
+### Step 2: Generating and parsing tcptrace RTT data
 
 1. Generate all the TCP RTTs from the `smallFlows.pcap` network trace using the `tcptrace` tool by executing the following command:
 ```
@@ -195,9 +195,30 @@ tcptrace -nrlZ --output_dir=intermediate/rtts ../pcaps/smallFlows.pcap > interme
 ```
 The RTT samples are written in individual files inside `intermediate/rtts`.
 
-2. 
+2. Parse the TCP RTTs from the `tcptrace` output by executing the following command:
+```
+python3 aggregate_tcptrace_rtts.py
+```
+The RTT samples are now cached in Python pickle files inside `intermediate`.
 
-### Step 3: Reproducing a figure equivalent to Figure 12
+### Step 3: Reproducing figures equivalent to Figures 9&mdash;11
+
+1. Execute simulations for a version of Dart with infinite memory by executing:
+```
+python3 run_simulations_infinite_memory.py
+```
+
+2. Generate plots equivalent to Figures 9 through 11 of the paper by executing:
+```
+python3 plot_tcptrace_infinite.py
+```
+
+3. Download the generated plots to your local system to view them by executing:
+```
+scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.amazonaws.com:~/sigcomm22-paper67-artifacts/plots/figure_*_equivalent.pdf <local_system_path>
+```
+
+### Step 4: Reproducing a figure equivalent to Figure 12
 
 1. Please ensure that you are in the `simulations` directory by executing:
 ```
@@ -208,7 +229,7 @@ cd ~/sigcomm22-paper67-artifacts/simulations
 ```
 python3 rtt_analysis_wnwo_handshakes.py
 ```
-The code reports statistics regarding connections and successful handshakes.
+The code reports statistics regarding connections, handshakes, and the count of RTT samples and generates a plot equivalent to Figure 12 in the paper.
 
 3. Download the generated plot to your local system to view it by executing:
 ```
@@ -217,9 +238,10 @@ scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.am
 Please note that in our original 15 mins. campus trace, we see a high number of unsuccessful handshakes due to SYN flooding attempts.
 We do not see such a phenomenon in the `smallFlows.pcap` file. As such, the number of unsuccessful handshakes is actually `zero`.
 Instead of reporting this on the plot, we report the number of *missing* handshakes, i.e., the number of connections where the handshakes were never seen, because the trace capture started after these handshakes were already complete.
-This is for completion.
+This is only for completion and to show an interesting fact about `smallFlows.pcap`.
 
-The main point this figure makes is that the percentage of handshake RTTs is sufficiently low such that we can avoid collecting them without any significant penalty. This holds true even for `smallFlows.pcap` (~8.6% of all RTTs are handshake RTTs).
+The main point Figure 12 makes in the paper is that the percentage of handshake RTTs is sufficiently low such that we can avoid collecting them without any significant penalty.
+The current plot shows that this holds true even for `smallFlows.pcap` (only ~13% of all RTTs are handshake RTTs).
 
 ### Step 4: Reproducing a figure equivalent to Figure 13
 

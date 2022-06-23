@@ -36,10 +36,9 @@ def aggregate_rtts():
             lc += 3
         lc += 1
 
-    tcptrace_rtts_all   = {}
-    tcptrace_rtts_nosyn = {}
-    tcptrace_rtts_syn   = {}
-    
+    ## Prepare a connection-tuple to sequence number to flags map
+    tcp_flags_map = {}
+
     with open(PICKLE_PATH, "rb") as fp:
         packets = pickle.load(fp)
     for packet in packets:
@@ -47,20 +46,27 @@ def aggregate_rtts():
         conn_tuple = (src_ip, dst_ip, src_port, dst_port)
         if conn_tuple not in connection_map:
             continue
+        if conn_tuple not in tcp_flags_map:
+            tcp_flags_map[conn_tuple] = {}
+        tcp_flags_map[conn_tuple][seq_num] = tcp_flgs
+
+    ## Collect RTTs
+    tcptrace_rtts_all   = {}
+    tcptrace_rtts_nosyn = {}
+    tcptrace_rtts_syn   = {}
+
+    for conn_tuple in connection_map:
         with open(os.path.join(TCPTRACE_DIR, connection_map[conn_tuple])) as fp:
             lines = [l.strip() for l in fp.readlines()]
             for line in lines:
                 tokens  = line.split(" ")
                 rtt_seq = int(tokens[0])
                 rtt     = int(tokens[1])
-                if seq_num == rtt_seq:
-                    
-                    # All RTTs
+                if conn_tuple in tcp_flags_map and rtt_seq in tcp_flags_map[conn_tuple]:
                     if conn_tuple not in tcptrace_rtts_all:
                         tcptrace_rtts_all[conn_tuple] = []
                     tcptrace_rtts_all[conn_tuple].append((seq_num, rtt))
-
-                    if "S" in tcp_flgs:
+                    if "S" in tcp_flags_map[conn_tuple][rtt_seq]:
                         # Handshake RTTs
                         if conn_tuple not in tcptrace_rtts_syn:
                             tcptrace_rtts_syn[conn_tuple] = []
@@ -70,6 +76,37 @@ def aggregate_rtts():
                         if conn_tuple not in tcptrace_rtts_nosyn:
                             tcptrace_rtts_nosyn[conn_tuple] = []
                         tcptrace_rtts_nosyn[conn_tuple].append((seq_num, rtt))
+    
+    # with open(PICKLE_PATH, "rb") as fp:
+    #     packets = pickle.load(fp)
+    # for packet in packets:
+    #     (_, _, src_ip, dst_ip, src_port, dst_port, tcp_flgs, seq_num, _, _) = packet
+    #     conn_tuple = (src_ip, dst_ip, src_port, dst_port)
+    #     if conn_tuple not in connection_map:
+    #         continue
+    #     with open(os.path.join(TCPTRACE_DIR, connection_map[conn_tuple])) as fp:
+    #         lines = [l.strip() for l in fp.readlines()]
+    #         for line in lines:
+    #             tokens  = line.split(" ")
+    #             rtt_seq = int(tokens[0])
+    #             rtt     = int(tokens[1])
+    #             if seq_num == rtt_seq:
+                    
+    #                 # All RTTs
+    #                 if conn_tuple not in tcptrace_rtts_all:
+    #                     tcptrace_rtts_all[conn_tuple] = []
+    #                 tcptrace_rtts_all[conn_tuple].append((seq_num, rtt))
+
+    #                 if "S" in tcp_flgs:
+    #                     # Handshake RTTs
+    #                     if conn_tuple not in tcptrace_rtts_syn:
+    #                         tcptrace_rtts_syn[conn_tuple] = []
+    #                     tcptrace_rtts_syn[conn_tuple].append((seq_num, rtt))
+    #                 else:
+    #                     # Non-handshake RTTs
+    #                     if conn_tuple not in tcptrace_rtts_nosyn:
+    #                         tcptrace_rtts_nosyn[conn_tuple] = []
+    #                     tcptrace_rtts_nosyn[conn_tuple].append((seq_num, rtt))
 
     with open(os.path.join(OUTPUT_PATH, "tcptrace_rtts_all.pickle"), "wb") as fp:
         pickle.dump(tcptrace_rtts_all, fp)

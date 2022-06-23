@@ -12,8 +12,7 @@ def compare_tcptrace_and_dartmeminf_rtts(dart_rtts):
         tcptrace_rtts = pickle.load(fp)
 
     for fkey in tcptrace_rtts:
-        missing_rtts = set(tcptrace_rtts[fkey]) - set(dart_rtts[fkey])
-        if len(missing_rtts) > 0:
+        if len(tcptrace_rtts[fkey]) > len(dart_rtts[fkey]):
             print(fkey)
             print(tcptrace_rtts[fkey])
             print(dart_rtts[fkey])
@@ -98,7 +97,7 @@ def main():
     print("Simulations complete at time: {}".format(t_end.strftime(t_format)))
     print("Time elapsed: {} mins.".format(t_elapsed))
 
-    compare_tcptrace_and_dartmeminf_rtts(tcptrace_const_syn._tcptrace_rtt_samples)
+    # compare_tcptrace_and_dartmeminf_rtts(tcptrace_const_syn._tcptrace_rtt_samples)
 
 ##################################################
 

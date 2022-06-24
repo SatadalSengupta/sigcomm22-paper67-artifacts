@@ -5,7 +5,7 @@ Below, you will find the steps to execute our code and reproduce our results (wh
 
 ## Note: Restrictions on Data Sharing
 
-We used a 15 mins. campus trace dataset to perform many of the evaluations in our paper (`Figure 6`, and `Figures 9&mdash;14`).
+We used a 15 mins. campus trace dataset to perform many of the evaluations in our paper (`Figure 6`, and `Figures 9`&mdash;`14`).
 The access to our campus traces is restricted by the Institutional Review Board (IRB) and the Institutional Review Panel for the use of Administrative Data in Research (PADR).
 Unfortunately, this means that we are not allowed to share these traces with anyone who is not an approved signatory on the IRB and PADR applications related to this study.
 This also means that we are not allowed to store these network traces anywhere except our institutional servers.
@@ -170,7 +170,7 @@ scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.am
 ## Instructions to Execute the Simulator
 
 The simulation code is present in `simulations`.
-This code can be used to obtain plots equivalent to `Figures 9&mdash;14`, by feeding `pcaps/smallFlows.pcap` as the input.
+This code can be used to obtain plots equivalent to `Figures 9`&mdash;`14`, by feeding `pcaps/smallFlows.pcap` as the input.
 The following steps take the evaluator through this process to generating the relevant plots from the network trace file.
 
 ### Step 1: Preprocessing network trace data
@@ -209,7 +209,7 @@ The RTT samples are now cached in Python pickle files inside `intermediate`.
 python3 run_simulations_infinite_memory.py
 ```
 
-2. Generate plots equivalent to `Figures 9&mdash;11` of the paper by executing:
+2. Generate plots equivalent to `Figures 9`&mdash;`11` of the paper by executing:
 ```
 python3 plot_tcptrace_infinite.py
 ```

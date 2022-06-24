@@ -251,7 +251,7 @@ python3 run_dart_simulations_batch_pt_memory.py
 python3 run_dart_simulations_batch_pt_stages.py
 ```
 
-3. Execute the following commands to generate figures equivalent to `Figures 13 and 14` in the paper:
+3. Execute the following commands to generate figures equivalent to `Figures 13` and `14` in the paper:
 ```
 python3 plot_pt_error_rate.py
 ```

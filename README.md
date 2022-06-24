@@ -76,9 +76,9 @@ If they seem to be active for too long (e.g., hours), it is possible that the ev
 We have cloned this repo in the EC2 instance already at `~/sigcomm22-paper67-artifacts`, and the code is up-to-date.
 Feel free to execute `cd ~/sigcomm22-paper67-artifacts && git pull` anyway if you wish to ensure that this code is the same as the one in the GitHub repo.
 
-2. We used the 15 mins. campus trace to produce Figure 7 in the paper.
+2. We used the 15 mins. campus trace to produce `Figure 6` in the paper.
 As mentioned before, we are not allowed to share this trace due to IRB and PADR protections.
-We request the reviewer to proceed to Figure 8 instead, since we can share the data for it, and it allows for evaluation of our prototype just as Figure 7 would.
+We request the reviewer to proceed to `Figure 8` instead, since we can share the data for it, and it allows for the evaluation of our prototype just as `Figure 7` would.
 <!-- We have instead shared [a public trace](https://tcpreplay.appneta.com/wiki/captures.html) ([smallFlows.pcap](https://s3.amazonaws.com/tcpreplay-pcap-files/smallFlows.pcap)).
 The trace is available in the GitHub repo and in the EC2 instance at `~/sigcomm22-paper67-artifacts/pcaps/smallFlows.pcap`.
 While Figure 7 can't be exactly reproduced using this dataset, we provide instructions later to produce a figure that emulates the main workflow and features of our prototype. -->

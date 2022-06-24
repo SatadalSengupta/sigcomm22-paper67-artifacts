@@ -5,7 +5,7 @@ Below, you will find the steps to execute our code and reproduce our results (wh
 
 ## Note: Restrictions on Data Sharing
 
-We used a 15 mins. campus trace dataset to perform many of the evaluations in our paper (Figure 6, and Figures 9 through 14).
+We used a 15 mins. campus trace dataset to perform many of the evaluations in our paper (`Figure 6`, and `Figures 9&mdash;14`).
 The access to our campus traces is restricted by the Institutional Review Board (IRB) and the Institutional Review Panel for the use of Administrative Data in Research (PADR).
 Unfortunately, this means that we are not allowed to share these traces with anyone who is not an approved signatory on the IRB and PADR applications related to this study.
 This also means that we are not allowed to store these network traces anywhere except our institutional servers.
@@ -78,12 +78,12 @@ Feel free to execute `cd ~/sigcomm22-paper67-artifacts && git pull` anyway if yo
 
 2. We used the 15 mins. campus trace to produce `Figure 6` in the paper.
 As mentioned before, we are not allowed to share this trace due to IRB and PADR protections.
-We request the reviewer to proceed to `Figure 8` instead, since we can share the data for it, and it allows for the evaluation of our prototype just as `Figure 7` would.
+We request the reviewer to proceed to `Figure 8` instead, since we can share the data for it, and it allows for the evaluation of our prototype just as `Figure 6` would.
 <!-- We have instead shared [a public trace](https://tcpreplay.appneta.com/wiki/captures.html) ([smallFlows.pcap](https://s3.amazonaws.com/tcpreplay-pcap-files/smallFlows.pcap)).
 The trace is available in the GitHub repo and in the EC2 instance at `~/sigcomm22-paper67-artifacts/pcaps/smallFlows.pcap`.
-While Figure 7 can't be exactly reproduced using this dataset, we provide instructions later to produce a figure that emulates the main workflow and features of our prototype. -->
+While Figure 6 can't be exactly reproduced using this dataset, we provide instructions later to produce a figure that emulates the main workflow and features of our prototype. -->
 
-3. The network trace we use to produce Figure 8 in the paper is a trace captured inside our campus.
+3. The network trace we use to produce `Figure 8` in the paper is a trace captured inside our campus.
 We initiated a BGP interception attack using the PEERING testbed for this experiment, as described in the paper.
 This trace captured communication between a host in our campus and a remote host on the US West Coast.
 The attacking host was located in Amsterdam and the attack was initiated sometime during the course of this communication.
@@ -116,7 +116,7 @@ Wait until you see the message `CLI listening on port 8000`. This terminal will 
 ```
 Wait until you the `bfshell> ` shell has been activated. This terminal will now be engaged &mdash; please move to the next terminal.
 
-<!-- ### Step 5: Replaying the smallFlows trace to generate a graph similar to Figure 7
+<!-- ### Step 5: Replaying the smallFlows trace to generate a graph similar to Figure 6
 
 1. From any directory, execute the following to start capturing the outcoming packets on the virtual interface `veth8`:
 ```
@@ -170,7 +170,7 @@ scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.am
 ## Instructions to Execute the Simulator
 
 The simulation code is present in `simulations`.
-This code can be used to obtain plots equivalent to Figures 9&mdash;14, by feeding `pcaps/smallFlows.pcap` as the input.
+This code can be used to obtain plots equivalent to `Figures 9&mdash;14`, by feeding `pcaps/smallFlows.pcap` as the input.
 The following steps take the evaluator through this process to generating the relevant plots from the network trace file.
 
 ### Step 1: Preprocessing network trace data
@@ -209,7 +209,7 @@ The RTT samples are now cached in Python pickle files inside `intermediate`.
 python3 run_simulations_infinite_memory.py
 ```
 
-2. Generate plots equivalent to Figures 9 through 11 of the paper by executing:
+2. Generate plots equivalent to `Figures 9&mdash;11` of the paper by executing:
 ```
 python3 plot_tcptrace_infinite.py
 ```
@@ -221,11 +221,11 @@ scp -i ~/.ssh/sigcomm22-paper67-aws-key.pem ubuntu@ec2-54-82-111-53.compute-1.am
 
 ### Step 4: Reproducing a figure equivalent to Figure 12
 
-1. Execute the following command to generate a figure equivalent to Figure 12 in the paper:
+1. Execute the following command to generate a figure equivalent to `Figure 12` in the paper:
 ```
 python3 rtt_analysis_wnwo_handshakes.py
 ```
-The code reports statistics regarding connections, handshakes, and the count of RTT samples and generates a plot equivalent to Figure 12 in the paper.
+The code reports statistics regarding connections, handshakes, and the count of RTT samples and generates a plot equivalent to `Figure 12` in the paper.
 
 2. Download the generated plot to your local system to view it by executing:
 ```
@@ -236,10 +236,10 @@ We do not see such a phenomenon in the `smallFlows.pcap` file. As such, the numb
 Instead of reporting this on the plot, we report the number of *missing* handshakes, i.e., the number of connections where the handshakes were never seen, because the trace capture started after these handshakes were already complete.
 This is only for completion and to show an interesting fact about `smallFlows.pcap`.
 
-The main point Figure 12 makes in the paper is that the percentage of handshake RTTs is sufficiently low such that we can avoid collecting them without any significant penalty.
+The main point `Figure 12` makes in the paper is that the percentage of handshake RTTs is sufficiently low such that we can avoid collecting them without any significant penalty.
 The current plot shows that this holds true even for `smallFlows.pcap` (only ~13% of all RTTs are handshake RTTs).
 
-### Step 5: Reproducing figures equivalent to Figure 13 and 14
+### Step 5: Reproducing figures equivalent to Figures 13 and 14
 
 1. Execute the following command to perform simulations for Dart with different PT memory sizes:
 ```
@@ -251,7 +251,7 @@ python3 run_dart_simulations_batch_pt_memory.py
 python3 run_dart_simulations_batch_pt_stages.py
 ```
 
-3. Execute the following commands to generate figures equivalent to Figures 13 and 14 in the paper:
+3. Execute the following commands to generate figures equivalent to `Figures 13 and 14` in the paper:
 ```
 python3 plot_pt_error_rate.py
 ```
